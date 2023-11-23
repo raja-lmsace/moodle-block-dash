@@ -31,7 +31,10 @@ require_once("$CFG->libdir/externallib.php");
 use block_dash\local\block_builder;
 use block_dash\local\data_source\form\preferences_form;
 use block_dash\output\renderer;
-use external_api;
+use core_external\external_api;
+use core_external\external_function_parameters;
+use core_external\external_value;
+use core_external\external_single_structure;
 
 /**
  * External API class.
@@ -46,16 +49,16 @@ class external extends external_api {
     /**
      * Returns description of get_database_schema_structure() parameters.
      *
-     * @return \external_function_parameters
+     * @return external_function_parameters
      */
     public static function get_block_content_parameters() {
-        return new \external_function_parameters([
-            'block_instance_id' => new \external_value(PARAM_INT),
-            'filter_form_data' => new \external_value(PARAM_RAW),
-            'page' => new \external_value(PARAM_INT, 'Paginator page.', VALUE_DEFAULT, 0),
-            'sort_field' => new \external_value(PARAM_TEXT, 'Field to sort by', VALUE_DEFAULT, null),
-            'sort_direction' => new \external_value(PARAM_TEXT, 'Sort direction of field', VALUE_DEFAULT, null),
-            'pagelayout' => new \external_value(PARAM_TEXT, 'pagelayout', VALUE_OPTIONAL),
+        return new external_function_parameters([
+            'block_instance_id' => new external_value(PARAM_INT),
+            'filter_form_data' => new external_value(PARAM_RAW),
+            'page' => new external_value(PARAM_INT, 'Paginator page.', VALUE_DEFAULT, 0),
+            'sort_field' => new external_value(PARAM_TEXT, 'Field to sort by', VALUE_DEFAULT, null),
+            'sort_direction' => new external_value(PARAM_TEXT, 'Sort direction of field', VALUE_DEFAULT, null),
+            'pagelayout' => new external_value(PARAM_TEXT, 'pagelayout', VALUE_OPTIONAL),
         ]);
     }
 
@@ -104,7 +107,7 @@ class external extends external_api {
         if (!$public) {
             // Verify the block created for frontpage. and user not loggedin allow to access the block content.
             list($unused, $course, $cm) = get_context_info_array($block->context->id);
-            if ($course->id == $SITE->id && !isloggedin()) {
+            if ((isset($course->id)) == $SITE->id && !isloggedin()) {
                 require_course_login($course);
                 $coursecontext = \context_course::instance($course->id);
                 $PAGE->set_context($coursecontext);
@@ -163,9 +166,9 @@ class external extends external_api {
      * @return \external_description
      */
     public static function get_block_content_returns() {
-        return new \external_single_structure([
-            'html' => new \external_value(PARAM_RAW),
-            'scripts' => new \external_value(PARAM_RAW)
+        return new external_single_structure([
+            'html' => new external_value(PARAM_RAW),
+            'scripts' => new external_value(PARAM_RAW)
         ]);
     }
 
@@ -175,12 +178,12 @@ class external extends external_api {
 
     /**
      * Describes the parameters for submit_create_group_form webservice.
-     * @return \external_function_parameters
+     * @return external_function_parameters
      */
     public static function submit_preferences_form_parameters() {
-        return new \external_function_parameters([
-            'contextid' => new \external_value(PARAM_INT, 'The context id for the block'),
-            'jsonformdata' => new \external_value(PARAM_RAW, 'The form data encoded as a json array')
+        return new external_function_parameters([
+            'contextid' => new external_value(PARAM_INT, 'The context id for the block'),
+            'jsonformdata' => new external_value(PARAM_RAW, 'The form data encoded as a json array')
         ]);
     }
 
@@ -301,8 +304,8 @@ class external extends external_api {
      * @since Moodle 3.0
      */
     public static function submit_preferences_form_returns() {
-        return new \external_single_structure([
-            'validationerrors' => new \external_value(PARAM_BOOL, 'Were there validation errors', VALUE_REQUIRED),
+        return new external_single_structure([
+            'validationerrors' => new external_value(PARAM_BOOL, 'Were there validation errors', VALUE_REQUIRED),
         ]);
     }
 

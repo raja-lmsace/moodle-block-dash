@@ -32,6 +32,8 @@ use html_writer;
 use cm_info;
 use moodle_url;
 
+require_once("$CFG->libdir/externallib.php");
+
 /**
  * Mylearning widget class contains the courses user enrolled and not completed.
  */

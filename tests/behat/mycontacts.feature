@@ -70,7 +70,7 @@ Feature: Add user contacts widget in dash block
     And I click on "#id_config_data_source_idnumber_block_dashlocalwidgetcontactscontacts_widget" "css_element"
     And I configure the "New Dash" block
     And I set the following fields to these values:
-      | Default region | content |
+      | Region | content |
     And I press "Save changes"
     And I click on "Reset Dashboard for all users" "button"
     And I log out

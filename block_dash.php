@@ -61,10 +61,42 @@ class block_dash extends block_base {
      * @throws coding_exception
      */
     public function specialization() {
+        global $OUTPUT;
+
         if (isset($this->config->title)) {
             $this->title = $this->title = format_string($this->config->title, true, ['context' => $this->context]);
         } else {
             $this->title = get_string('newblock', 'block_dash');
+        }
+
+        try {
+            $bb = block_builder::create($this);
+            if ($bb->is_collapsible_content_addon()) {
+                $addclass = "collapsible-block dash-block-collapse-icon";
+                if (!$bb->is_section_expand_content_addon()) {
+                    $addclass .= " collapsed";
+                }
+                $attr = [
+                    'data-toggle' => 'collapse',
+                    'class' => $addclass,
+                    'href' => "#dash-{$this->instance->id}",
+                    "aria-expanded" => "false",
+                    "aria-controls" => "dash-{$this->instance->id}",
+                ];
+                $this->title = html_writer::tag('span', $this->title, $attr);
+            }
+        } catch (\Exception $e) {
+            // Configured datasource is missing.
+            $this->title = get_string('newblock', 'block_dash');
+        }
+
+        $showheader = get_config('block_dash', 'showheader');
+        if (isset($this->config->showheader)) {
+            $showheader = $this->config->showheader;
+        }
+
+        if (!$showheader && !$this->page->user_is_editing()) {
+            $this->title = "";
         }
     }
 
@@ -89,6 +121,18 @@ class block_dash extends block_base {
             file_save_draft_area_files($data->backgroundimage, $this->context->id, 'block_dash', 'images',
                 0, ['subdirs' => 0, 'maxfiles' => 1]);
         }
+        if (isset($data->dash_configure_options) && isset($data->data_source_idnumber)) {
+            $datasource = data_source_factory::build_data_source($data->data_source_idnumber,
+                $this->context);
+            if ($datasource) {
+                if (method_exists($datasource, 'set_default_preferences')) {
+                    $configpreferences = ['config_preferences' => []];
+                    $datasource->set_default_preferences($configpreferences);
+                    $data->preferences = $configpreferences['config_preferences'];
+                }
+            }
+            unset($data->dash_configure_options);
+        }
 
         parent::instance_config_save($data, $nolongerused);
     }
@@ -96,7 +140,7 @@ class block_dash extends block_base {
     /**
      * Copy any block-specific data when copying to a new block instance.
      *
-     * @param int $fromid the id number of the block instance to copy from
+     * @param int $frominstanceid the id number of the block instance to copy from
      * @return boolean
      */
     public function instance_copy($frominstanceid) {
@@ -162,12 +206,13 @@ class block_dash extends block_base {
             $this->content->text = is_siteadmin() ? get_string('disableallmessage', 'block_dash') : '';
             return $this->content;
         }
+
         try {
             $bb = block_builder::create($this);
 
             $datasource = $bb->get_configuration()->get_data_source();
             // Conditionally hide the block when empty.
-            if (isset($this->config->hide_when_empty) && $this->config->hide_when_empty
+            if ($datasource && isset($this->config->hide_when_empty) && $this->config->hide_when_empty
                 && (($datasource->is_widget() && $datasource->is_empty())
                 || (!$datasource->is_widget() && $datasource->get_data()->is_empty()))
                 && !$this->page->user_is_editing()) {
@@ -196,7 +241,14 @@ class block_dash extends block_base {
     public function html_attributes() {
         $attributes = parent::html_attributes();
         if (isset($this->config->css_class)) {
-            $attributes['class'] .= ' ' . $this->config->css_class;
+            $cssclasses = $this->config->css_class;
+            if (!is_array($cssclasses)) {
+                $cssclasses = explode(',', $cssclasses);
+            }
+            foreach ($cssclasses as $class) {
+                $attributes['class'] .= ' ' . trim($class);
+            }
+
         }
         if (isset($this->config->width)) {
             $attributes['class'] .= ' dash-block-width-' . $this->config->width;
@@ -206,6 +258,15 @@ class block_dash extends block_base {
 
         if (isset($this->config->preferences['layout'])) {
             $attributes['class'] .= ' ' . str_replace('\\', '-', $this->config->preferences['layout']);
+        }
+
+        try {
+            $bb = block_builder::create($this);
+            if ($bb->is_collapsible_content_addon()) {
+                $attributes['class'] .= ' block-collapse-block';
+            }
+        } catch (\Exception $e) {
+            $attributes['class'] .= ' missing-datasource';
         }
 
         return $attributes;
@@ -222,7 +283,7 @@ class block_dash extends block_base {
         $blockcss = [];
         $data = [
             'block' => $this,
-            'headerfootercolor' => isset($this->config->headerfootercolor) ? $this->config->headerfootercolor : null
+            'headerfootercolor' => isset($this->config->headerfootercolor) ? $this->config->headerfootercolor : null,
         ];
 
         $backgroundgradient = isset($this->config->backgroundgradient)
@@ -237,7 +298,21 @@ class block_dash extends block_base {
                 $blockcss[] = sprintf('background-image: url(%s);', $this->get_background_image_url());
             }
         } else if ($backgroundgradient) {
-            $blockcss[] = sprintf('background: %s', $this->config->backgroundgradient);
+            $blockcss[] = sprintf('background-image: %s;', $this->config->backgroundgradient);
+        }
+
+        // Background postition.
+        if (isset($this->config->backgroundimage_position)) {
+            $bgpostion = $this->config->backgroundimage_position;
+            $bgpostionvalue = ($bgpostion == 'custom') ? $this->config->backgroundimage_customposition : $bgpostion;
+            $blockcss[] = sprintf('background-position: %s;', $bgpostionvalue);
+        }
+
+        // Background size.
+        if (isset($this->config->backgroundimage_size)) {
+            $bgsize = $this->config->backgroundimage_size;
+            $bgsizevalue = ($bgsize == 'custom') ? $this->config->backgroundimage_customsize : $bgsize;
+            $blockcss[] = sprintf('background-size: %s;', $bgsizevalue);
         }
 
         if (isset($this->config->css) && is_array($this->config->css)) {
@@ -245,6 +320,15 @@ class block_dash extends block_base {
                 if (!empty($value)) {
                     $blockcss[] = sprintf('%s: %s;', $property, $value);
                 }
+            }
+        }
+
+        if (isset($this->config->border_option)) {
+            if ($this->config->border_option) {
+                $bordervalue = ($this->config->border) ? $this->config->border : "1px solid rgba(0,0,0,.125)";
+                $blockcss[] = sprintf('%s: %s;', 'border', $bordervalue);
+            } else {
+                $blockcss[] = sprintf('%s: %s;', 'border', "none");
             }
         }
 
@@ -328,8 +412,6 @@ class block_dash extends block_base {
         $cache->set($key, [$fieldname => $sorting[$fieldname]]);
     }
 
-
-
     /**
      * Include the preference option to the blocks controls before genreate the output.
      *
@@ -367,19 +449,17 @@ class block_dash extends block_base {
         }
         // Move icon.
         $str = new lang_string('preferences', 'core');
-        $icon = $output->render(new pix_icon('i/dashboard', $str, 'moodle', array('class' => 'iconsmall', 'title' => '')));
+        $icon = $output->render(new pix_icon('i/dashboard', $str, 'moodle', ['class' => 'iconsmall', 'title' => '']));
 
         $newcontrols = [];
         foreach ($bc->controls as $controls) {
             $newcontrols[] = $controls;
             if ($controls->text instanceof lang_string && $controls->text->get_identifier() == 'configureblock') {
-                $newcontrols[] = html_writer::link('javascript:void(0);', $icon . $str, array('class' => 'dash-edit-preferences'));
+                $newcontrols[] = html_writer::link('javascript:void(0);', $icon . $str, ['class' => 'dash-edit-preferences']);
             }
         }
         $bc->controls = $newcontrols;
         return $bc;
     }
-
-
 
 }

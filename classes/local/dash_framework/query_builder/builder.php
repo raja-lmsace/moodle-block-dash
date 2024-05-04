@@ -102,6 +102,16 @@ class builder {
     private $rawconditionparameters = [];
 
     /**
+     * @var array
+     */
+    private $rawjoins = [];
+
+    /**
+     * @var array
+     */
+    private $rawjoinsparameters = [];
+
+    /**
      * Fields to retried from sql query. Sql select field.
      * @param string $field
      * @param string $alias
@@ -157,6 +167,18 @@ class builder {
     }
 
     /**
+     * Join raw in query.
+     *
+     * @param string $joinsql SQL join type. See self::TYPE_*
+     * @param array $parameters Extra parameters used in join SQL.
+     * @return $this
+     */
+    public function join_raw(string $joinsql, array $parameters = []): builder {
+        $this->rawjoins[] = [$joinsql, $parameters];
+        return $this;
+    }
+
+    /**
      * Add additional join condition to existing join.
      *
      * @param string $alias
@@ -187,10 +209,13 @@ class builder {
      * @param string $selector Field or alias of where clause.
      * @param array $values Values that where clause will compare to.
      * @param string $operator Equals, greater than, in, etc etc. See where::OPERATOR_*
+     * @param string $conjunctive AND, OR etc etc. See where::CONJUCTIVE_OPERATOR_*
+     *
      * @return where
      */
-    public function where(string $selector, array $values, string $operator = where::OPERATOR_EQUAL): where {
-        $where = new where($selector, $values, $operator);
+    public function where(string $selector, array $values, string $operator = where::OPERATOR_EQUAL,
+        string $conjunctive = where::CONJUNCTIVE_OPERATOR_AND): where {
+        $where = new where($selector, $values, $operator, $conjunctive);
         $this->wheres[] = $where;
         return $where;
     }
@@ -345,11 +370,15 @@ class builder {
     protected function get_where_sql_and_params(): array {
         $wheresql = [];
         $params = [];
+        $wsql = ''; // Where builder queryies.
         foreach ($this->get_wheres() as $where) {
-            [$wsql, $wparams] = $where->get_sql_and_params();
-            $wheresql[] = $wsql;
+            [$sql, $wparams] = $where->get_sql_and_params();
+            $conjunc = $where->get_conjunctive_operator() ?: 'AND';
+            $wsql .= !empty($wsql) ? sprintf(' %s %s ', $conjunc, $sql) : $sql;
             $params = array_merge($params, $wparams);
         }
+
+        $wheresql[] = $wsql;
 
         if ($this->rawwhere) {
             foreach ($this->rawwhere as $where) {
@@ -358,7 +387,7 @@ class builder {
             $params = array_merge($params, $this->rawwhereparameters);
         }
 
-        return [implode(' AND ', $wheresql), $params];
+        return [implode(' AND ', array_filter($wheresql)), $params];
     }
 
     /**
@@ -373,6 +402,12 @@ class builder {
 
         foreach ($this->joins as $join) {
             [$jsql, $jparams] = $join->get_sql_and_params();
+            $sql .= ' ' . $jsql . ' ';
+            $params = array_merge($params, $jparams);
+        }
+
+        foreach ($this->rawjoins as $join) {
+            [$jsql, $jparams] = $join;
             $sql .= ' ' . $jsql . ' ';
             $params = array_merge($params, $jparams);
         }

@@ -44,11 +44,14 @@ $string['badgecolorfield_help'] = 'Choose a field that returns colors to be used
 $string['blocktitle'] = 'Block title';
 $string['blocktitle_help'] = 'Title displayed in block heading. Enter a short and descriptive title for what this block displays to the user.';
 $string['blockwidth'] = 'Block width';
+$string['showheader'] = "Show header";
+$string['showheader_help'] = "Hide the block title if editing is turned off.";
+$string['hidden'] = "Hidden";
 $string['bodyfield'] = 'Body field';
 $string['bootstrapversion'] = 'Theme bootstrap version';
 $string['bootstrapversion_desc'] = 'Choose the version of Bootstrap your theme supports. Moodle is typically 4, and Totara is 3.';
 $string['border'] = 'Border';
-$string['border_help'] = 'CSS border property value. Set to <b>none</b> for no borders.';
+$string['border_help'] = 'CSS border property value.';
 $string['choosedatasource'] = 'Choose data source';
 $string['columns'] = 'Columns';
 $string['columns_help'] = 'The number of columns to display per row in the grid.';
@@ -163,6 +166,7 @@ $string['headercontent'] = 'Header content';
 $string['headercontent_help'] = 'Content displayed in the block header.';
 $string['headingfield'] = 'Heading field';
 $string['hidewhenempty'] = 'Hide when empty';
+$string['hidewhenempty_desc'] = "Hide the dash block when it's empty.";
 $string['iconfield'] = 'Icon field';
 $string['imageoverlayfield'] = 'Image overlay field';
 $string['imageoverlayfield_help'] = 'Content to display over image with solid background.';
@@ -213,6 +217,7 @@ $string['parentrole_help'] = 'Only includes users that the current user has a ro
 $string['parseerror'] = 'Parse error. The content cannot be displayed.';
 $string['permissions'] = 'Restrict access to';
 $string['permissionscohort'] = 'Cohort';
+$string['permissionsrole'] = 'Role';
 $string['permissionsloggedin'] = 'Must be logged in';
 $string['permissionspublic'] = 'Public';
 $string['perpage'] = 'Per page';
@@ -541,3 +546,333 @@ $string['widgetsdesc'] = 'Pick a ready-to-use content widget and configure it';
 $string['datasourcedesc'] = 'Add dynamic content with data sources and layouts';
 // ...Conditions strings.
 $string['showhiddencourses'] = 'Show hidden courses';
+$string['maintable'] = 'Select main table <b>(mnt)</b> ';
+$string['maintable_help'] = 'Choose the main table for field generation';
+// ...Developer addon strings.
+
+// ...Operators strings.
+$string['operatorequal'] = '=';
+$string['operatornotequal'] = '!=';
+$string['operatorgreaterthan'] = '>';
+$string['operatorgreaterthanequal'] = '>=';
+$string['operatorlessthan'] = '<';
+$string['operatorlessthanequal'] = '<=';
+$string['operatorlike'] = 'LIKE';
+$string['operatorlikebetween'] = 'LIKE %..%';
+$string['operatornotlike'] = 'NOT LIKE';
+$string['operatorin'] = 'IN (...)';
+$string['operatornotin'] = 'NOT IN (...)';
+$string['operatorinquery'] = 'IN (Query)';
+$string['operator'] = 'Operator';
+
+// ...Form section headers.
+$string['fieldssection'] = 'Fields setup';
+$string['conditionsection'] = 'Condition setup';
+$string['fields'] = 'Fields';
+$string['field'] = 'Field';
+$string['fieldtransformdata'] = 'Transform the format';
+$string['fieldtransformdata_help'] = 'Transform the format of the value when displayed in the table';
+
+$string['fieldcustomdata'] = 'Additional format value';
+$string['fieldcustomdata_help'] = 'Enter the additional data related to the selected attribute
+<b>For example: </b>
+1. For the link attribute, enter the link and use the field values as parameters <br>
+2. For the percent attribute, Use the outof value. For the grades use 10 otherwise it uses 100
+';
+
+$string['operatorcondition'] = 'Condition';
+$string['conditionvalue'] = 'Value';
+$string['customcondition'] = 'Custom condition query';
+$string['conditionaddfields'] = 'Add {no} condition(s)';
+$string['conditionvalue_help'] = 'Condition Value - Enter the specific value against which the condition will be checked. This value is crucial in determining when the condition is met or satisfied.
+Enter the values with comma(,) for IN conditions';
+
+// ...Developer datasource and table.
+$string['attribute'] = 'Attribute';
+$string['maintablenotconfigured'] = 'Main table not configured for the developer data source';
+$string['persistenttablealias'] = 'Custom source main table';
+$string['developerfield'] = '{$a}';
+$string['developerfieldid'] = 'id';
+$string['tablejoinshdr'] = 'Join tables';
+
+$string['tablejoin'] = 'Select Join table';
+$string['tablejoin_help'] = 'Choose the table to join with main table. Use the alias for conditions.';
+$string['tablejoinon'] = 'Enter condition query to join';
+$string['deletejoin'] = 'Delete this join table';
+
+$string['placeholderfields'] = 'Placeholder fields';
+$string['placeholderfields_help'] = 'Select the fields and use those fields in the field additional custom values with {field_name}, this will be replaced with its corresponding values.';
+$string['generateattributes'] = 'Generate field attributes';
+$string['fieldattributeshdr'] = 'Transform field data format';
+$string['transformformat'] = 'Transform format of {$a}';
+$string['enablejoins'] = 'Enable joins';
+$string['enableconditions'] = 'Enable conditions';
+$string['generatefields'] = 'Generate fields';
+$string['addjointable'] = 'Add {no} join table to form';
+$string['deletefield'] = 'Delete this field';
+$string['deletecondition'] = 'Delete this condition';
+$string['tablejoinstatichdr'] = 'Joint table #{$a}';
+$string['tablejoinsalias'] = 'Table alias';
+$string['fieldstatichdr'] = 'Field #0';
+$string['conditionstatichdr'] = 'Condition #0';
+$string['operatorcondition_help'] = 'Conjunctive Operator - Choose between "AND" and "OR" to define how multiple conditions are combined.
+- "AND" requires that all conditions must be true for the overall condition to be met.
+- "OR" requires that at least one of the conditions must be true for the overall condition to be met.';
+
+// ...Skill progress dash addon widget.
+$string['widget:skillprogress'] = 'Skill progress';
+$string['widget:skillprogress_help'] = 'Skill Progress displays the user\'s overall progress in all selected skills, including the current level and points earned for each skill individually.';
+$string['coursedates'] = 'Course dates';
+$string['skills'] = 'Skills';
+$string['donut'] = 'Donut';
+$string['currentlevel'] = 'Current level';
+$string['nextlevelpoints'] = 'Next level points';
+$string['totallevelpoints'] = 'Total level points';
+$string['hideindividualskills'] = 'Hide individual skills';
+
+// ...Myskill condition.
+$string['myskills'] = 'My skills';
+$string['hidecompletedskills'] = 'Hide completed skills';
+$string['currentcourseskills'] = 'Current course skills';
+$string['totalpoints'] = 'Total points';
+$string['nextlevelstr'] = '{$a->points} points to become {$a->name}';
+
+// ...Dash skill levels visual display.
+$string['widget:skilllevelvisuals'] = 'Skill level visuals';
+$string['widget:skilllevelvisuals_help'] = 'Display the levels associated with the selected skill as images.';
+$string['fieldcurrentlevel'] = 'Display current level';
+$string['fieldalllevels'] = 'Display all levels';
+$string['chooseskill'] = 'Choose skill';
+$string['tablealias_tsk'] = 'Skills';
+$string['yourcurrentlevel'] = 'Your current level';
+
+// ... My profile widget strings.
+$string['myprofiletable'] = 'Profile';
+$string['widget:myprofile'] = 'My profile';
+$string['widget:myprofile_help'] = 'Display the information about the user profile with important KPI';
+
+$string['field:profileimage'] = 'Show user profile image';
+$string['field:fullname'] = 'Show user\'s full name';
+
+$string['field:completedcourses'] = 'Completed courses';
+$string['field:enrolledprogress'] = 'Completed/total courses';
+$string['field:coursesinprogress'] = 'Courses in progress';
+$string['field:currentcoursescount'] = 'Current courses';
+$string['field:futurecoursescount'] = 'Future courses';
+$string['field:pastcoursescount'] = 'Past courses';
+$string['field:earnedskillpoints'] = 'Earned skill points';
+$string['field:earnedandtotalpoints'] = 'Earned/total skill points';
+$string['field:loginstreak'] = 'Login streak';
+$string['field:loginsthisweek'] = 'Logins this week';
+$string['field:completedcoursesinweek'] = 'Completed courses this week';
+$string['field:completedactivitiesinweek'] = 'Completed activities this week';
+$string['field:numberofdueactivities'] = 'Number of due activities';
+$string['field:numberofoverdueactivities'] = 'Number of overdue activities';
+$string['field:numberofunreadmsg'] = 'Number of unread messages';
+$string['field:numberofcontactreq'] = 'Number of contact requests';
+$string['field:sincelogindays'] = 'Number of days since last login';
+$string['field:teammemberscount'] = 'Number of team members';
+$string['field:onlineuserscount'] = 'Number of users currently online';
+$string['field:profileuserinfo'] = 'Profile user info {$a}';
+$string['field:kpi'] = 'KPI {$a}';
+$string['loginstreakdays'] = 'Login streak days';
+$string['loginstreakdaysdesc'] = 'Set the number of consecutive days required to maintain a streak.';
+
+// ...myprofile kpi labels displayed to users.
+$string['label:completedcourses'] = 'Completed courses';
+$string['label:enrolledprogress'] = 'Completed courses';
+$string['label:coursesinprogress'] = 'Courses in progress';
+$string['label:currentcoursescount'] = 'Current courses';
+$string['label:futurecoursescount'] = 'Future courses';
+$string['label:pastcoursescount'] = 'Past courses';
+$string['label:earnedskillpoints'] = 'Points collected';
+$string['label:earnedandtotalpoints'] = 'Earned/total points';
+$string['label:loginstreak'] = 'Day streak';
+$string['label:loginsthisweek'] = 'Logins this week';
+$string['label:completedcoursesinweek'] = 'Courses completed this week';
+$string['label:completedactivitiesinweek'] = 'Activities completed this week';
+$string['label:numberofdueactivities'] = 'Due activities';
+$string['label:numberofoverdueactivities'] = 'Overdue activities';
+$string['label:numberofunreadmsg'] = 'Unread messages';
+$string['label:numberofcontactreq'] = 'Contact requests';
+$string['label:sincelogindays'] = 'Days since last login';
+$string['label:teammemberscount'] = 'Team members';
+$string['label:onlineuserscount'] = 'Users currently online';
+
+// ...Block dash.
+$string['learningpath:path'] = 'Path';
+$string['learningpath:infoarea'] = 'Info area content';
+
+$string['widget:learningpath'] = 'Learning Path';
+$string['widget:learningpath_help'] = 'List of courses available in the learning path.';
+
+$string['dot'] = "Dot";
+$string['tinyimage'] = "Tiny image";
+$string['smallimage'] = "Small image";
+$string['mediumimage'] = "Medium image";
+$string['largeimage'] = "Large image";
+$string['extralargeimage'] = "Extra large image";
+
+$string['menu'] = "Menu order";
+$string['courseshortname'] = "Course short name";
+$string['coursefullname'] = "Course full name";
+$string['courseidnumber'] = "Course idnumber";
+$string['coursestartdate'] = "Course start date";
+
+$string['asc'] = "ASC";
+$string['desc'] = "DESC";
+
+
+$string['field:infoarea'] = "Info area";
+$string['field:infoarea_help'] = "if true, show the info area";
+$string['field:courseimgsize'] = "Course image size";
+$string['field:courseimgsize_help'] = "
+Dot — 20x20 px dot, without the course image. <br>
+Tiny image — 35x35px.<br>
+Small image — 50x50px.<br>
+Medium image — 75x75px.<br>
+Large image — 100x100px.<br>
+Extra large image — 150x150px.
+";
+$string['field:startelement'] = "Start element";
+$string['field:startelement_help'] = " if true, adds the start element at the beginning of the path";
+$string['field:finishelement'] = "Finish element";
+$string['field:finishelement_help'] = "if true, adds the finish element at the End of the path";
+$string['field:detailsarea'] = "Details area";
+$string['field:detailsarea_help'] = "if true, displays a details area as modal upon clicking the course";
+$string['field:orderby'] = "Order by";
+$string['field:orderby_help'] = "Order by";
+$string['field:orderdirection'] = "Order direction";
+$string['field:orderdirection_help'] = "Order direction";
+$string['field:limit'] = "Limit";
+$string['field:limit_help'] = "Limit";
+$string['field:learningpathdesktop'] = "Path for Desktop";
+$string['field:learningpathtablet'] = "Path for Tablet";
+$string['field:learningpathmobile'] = "Path for Mobile";
+$string['leanringpath_infocontent'] = 'You have completed <b>{$a->completed}</b> out of <b> {$a->total} </b> courses. The next course in this learning path is: <b> {$a->nextcourse}</b>';
+$string['trialpath'] = "Trial";
+$string['anothertrailpath'] = "Another trial";
+$string['circlepath'] = "Circle";
+$string['desktop_learningpath'] = "Learning Path for Desktop";
+$string['desktop_learningpath_desc'] = "";
+$string['tablet_learningpath'] = "Learning Path for Tablet";
+$string['tablet_learningpath_desc'] = "";
+$string['mobile_learningpath'] = "Learning Path for Mobile";
+$string['mobile_learningpath_desc'] = "";
+
+$string['resumelearningpath'] = "Resume learning path";
+$string['completedlearningpath'] = "Learning path complete. Good job!";
+
+$string['resumecourse'] = "Resume course";
+$string['completedcourse'] = "Completed course";
+$string['startcourse'] = "Start course";
+
+$string['restrictcurrentsection'] = "Automatically restrict to current section";
+$string['restrictcurrentsection_desc'] = "If a dash block with the content addon is added to a single-section page, it shall be automatically restricted to that section.";
+
+$string['learningpathstart'] = 'Start';
+$string['learningpathfinish'] = 'Finish';
+$string['nocourselearnigpath'] = "No courses have been added to the learning path yet.";
+
+// ... enrol program string.
+$string['programimagelink'] = 'Program image linked';
+$string['smart_coursebutton'] = 'Smart course button';
+$string['fullnamelinked'] = 'Fullname linked';
+$string['contextlinked'] = 'Context linked';
+$string['description'] = 'Description';
+$string['programs:view'] = 'View programs';
+$string['selfallocationwithkey'] = 'Sigup (Key required)';
+$string['viewprogram'] = 'View program';
+
+$string['createddate'] = 'Created date';
+$string['modifieddate'] = 'Last modified date';
+$string['duedate'] = 'Due date';
+$string['categoryurl'] = 'Category URL';
+$string['modulename'] = 'Module Name';
+$string['programbg'] = "Enrol Program image";
+$string['programbg_desc'] = "";
+
+// Course certificate datasource strings.
+$string['downloadcertificate'] = 'Download certificate';
+$string['certificatecodelinked'] = 'Code linked';
+
+// Category datasource.
+$string['categories'] = 'Categories';
+$string['categories_help'] = 'Categories datasource list the available categories.';
+$string['recentcoursename'] = 'Recent course';
+$string['categoryimagelink'] = 'Category link';
+$string['categoryimage'] = 'Category image';
+$string['categorycoursecount'] = 'Courses count';
+// ...Category image settings.
+$string['categoryimgheading'] = 'Category image';
+$string['categoryimgheadingsub'] = 'Categories images';
+$string['categoryimgdesc'] = 'Add images for the categories';
+$string['categoryimgcategory'] = 'Image for category {$a->category}';
+$string['categoryimgfallback'] = 'Category fallback image';
+$string['categoryimgfallbackdesc'] = 'Upload the image for the default fallback of categories. If new categories are created, the fallback image will be displayed until a new image is added for the category';
+$string['categoryimageurl'] = 'Category image url';
+
+$string['cssclass'] = "CSS classes";
+$string['cssclass_help'] = "Use a custom CSS class to apply multiple classes.";
+$string['backgroundposition'] = 'Background Position';
+$string['backgroundposition_help'] = 'Background image will focused on the given position';
+$string['designercustombgposition'] = "Custom Background Position";
+$string['backgroundsize'] = 'Background Size';
+$string['backgroundsize_help'] = 'Background image will displayed in the size';
+$string['designercustombgsize'] = "Custom Background Size";
+$string['backgroundsize_help'] = 'Background image will displayed in the size';
+
+$string['initial'] = "Initial";
+$string['lefttop'] = "Left Top";
+$string['leftcenter'] = "Left Center";
+$string['leftbottom'] = "Left Bottom";
+$string['righttop'] = "Right Top";
+$string['rightcenter'] = "Right Center";
+$string['rightbottom'] = "Right Bottom";
+$string['centertop'] = "Center Top";
+$string['centercenter'] = "Center Center";
+$string['centerbottom'] = "Center Bottom";
+
+$string['auto'] = "Auto";
+$string['cover'] = "Cover";
+$string['contain'] = "Contain";
+
+$string['strcustom'] = "Custom";
+$string['cohorts'] = "Cohorts";
+$string['users_mycohort'] = "Users in one of my cohorts";
+
+$string['currentcategory'] = 'Current Category';
+$string['dashicon'] = 'Icon';
+$string['dashicon_help'] = 'This icon shows onlu in the dashboards data source.';
+$string['dashthumbnailimg'] = 'Thumbnail image';
+$string['dashthumbnailimgurl'] = 'Thumbnail image URL';
+$string['dashthumbnailimg_help'] = "This thumbnail image shows only in dashboards data source";
+$string['dashbgimg'] = 'Background image';
+$string['dashbgimg_help'] = 'This background image used as background for the dashboard.';
+$string['coredashboard'] = "Main dashboard";
+$string['backgroundimageurl'] = 'Background image URL';
+
+$string['border_option'] = "Show border";
+$string['border_option_help'] = "You can add the border of dash block.";
+$string['bordervalue'] = "Border Value";
+
+
+$string['managedashaddonplugins'] = "Manage addons";
+$string['dashaddonpluginname'] = 'Dash addon name';
+$string['hideshow'] = 'Hide/Show';
+
+$string['maindashboard'] = "Main dashboard";
+$string['enterclasses'] = "Enter classes";
+// Permissions role context.
+$string['permissionsrolecontext'] = 'Role Context';
+$string['permissionsrolecontext_help'] = 'Select the context for which the user\'s role should be checked (Any context or system context only)';
+// ...Dashaddon skill graph strings.
+$string['managecapabilitymissing'] = 'Require capability "moodle/competency:competencymanage" to access the page is missing';
+$string['managecompentency'] = 'Manage competencies appearance';
+$string['totalprogress'] = 'Total progress';
+$string['setup'] = 'Setup';
+$string['compentenciesnotfound'] = 'Competency not found.';
+$string['competencyappearance'] = 'Competency appearances';
+$string['competencyheading'] = 'Setup competency appearance';
+$string['competencycolor'] = 'Competency color';
+$string['competencyimage'] = 'Competency image';

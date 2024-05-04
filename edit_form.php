@@ -22,6 +22,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
+
 use block_dash\local\data_source\data_source_factory;
 
 /**
@@ -40,6 +42,7 @@ class block_dash_edit_form extends block_edit_form {
      * @throws coding_exception
      */
     protected function specific_definition($mform) {
+        global $CFG;
         // Fields for editing HTML block title and contents.
         $mform->addElement('header', 'dashconfigheader', get_string('blocksettings', 'block'));
 
@@ -60,6 +63,14 @@ class block_dash_edit_form extends block_edit_form {
 
         $mform->addElement('header', 'apperance', get_string('appearance'));
 
+        $mform->addElement('select', 'config_showheader', get_string('showheader', 'block_dash'), [
+            0 => get_string('hidden', 'block_dash'),
+            1 => get_string('visible'),
+        ]);
+        $mform->setType('config_showheader', PARAM_INT);
+        $mform->setDefault('config_showheader', get_config('block_dash', 'showheader'));
+        $mform->addHelpButton('config_showheader', 'showheader', 'block_dash');
+
         $mform->addElement('select', 'config_width', get_string('blockwidth', 'block_dash'), [
             100 => '100',
             50 => '1/2',
@@ -67,36 +78,106 @@ class block_dash_edit_form extends block_edit_form {
             66 => '2/3',
             25 => '1/4',
             20 => '1/5',
-            16 => '1/6'
+            16 => '1/6',
         ]);
         $mform->setType('config_width', PARAM_INT);
         $mform->setDefault('config_width', 100);
 
         $mform->addElement('select', 'config_hide_when_empty', get_string('hidewhenempty', 'block_dash'), [
             0 => get_string('no'),
-            1 => get_string('yes')
+            1 => get_string('yes'),
         ]);
-        $mform->setType('config_hide_When_empty', PARAM_BOOL);
 
-        $mform->addElement('text', 'config_css_class', get_string('cssclass', 'block_dash'));
+        $mform->setType('config_hide_when_empty', PARAM_INT);
+        $mform->setDefault('config_hide_when_empty', get_config('block_dash', 'hide_when_empty'));
+
+        $attributes['tags'] = true;
+        $attributes['multiple'] = 'multiple';
+        $attributes['placeholder'] = get_string('enterclasses', 'block_dash');
+
+        $cssclassses = explode(',', get_config('block_dash', 'cssclass'));
+        $cssclassses = array_combine($cssclassses, $cssclassses);
+        $mform->addElement('autocomplete', 'config_css_class', get_string('cssclass', 'block_dash'), $cssclassses, $attributes);
         $mform->setType('config_css_class', PARAM_TEXT);
+        $mform->addHelpButton('config_css_class', 'cssclass', 'block_dash');
 
         $mform->addElement('filemanager', 'config_backgroundimage', get_string('backgroundimage', 'block_dash'), null,
             ['subdirs' => 0, 'maxfiles' => 1, 'accepted_types' => ['image'], 'return_types' => FILE_INTERNAL | FILE_EXTERNAL]);
         $mform->addHelpButton('config_backgroundimage', 'backgroundimage', 'block_dash');
 
-        $mform->addElement('text', 'config_backgroundgradient', get_string('backgroundgradient', 'block_dash'),
+        $postions = [
+            'initial' => get_string('initial', 'block_dash'),
+            'left top' => get_string('lefttop', 'block_dash'),
+            'left center' => get_string('leftcenter', 'block_dash'),
+            'left bottom' => get_string('leftbottom', 'block_dash'),
+            'right top' => get_string('righttop', 'block_dash'),
+            'right center' => get_string('rightcenter', 'block_dash'),
+            'right bottom' => get_string('rightbottom', 'block_dash'),
+            'center top' => get_string('centertop', 'block_dash'),
+            'center center' => get_string('centercenter', 'block_dash'),
+            'center bottom' => get_string('centerbottom', 'block_dash'),
+            'custom' => get_string('strcustom', 'block_dash'),
+        ];
+         // Module background image poisiton.
+         $mform->addElement('select', 'config_backgroundimage_position', get_string('backgroundposition', 'block_dash'),
+         $postions);
+         $mform->setType('config_backgroundimage_position', PARAM_RAW);
+         $mform->addHelpButton('config_backgroundimage_position', 'backgroundposition', 'block_dash');
+
+         // Module background image custom poisiton.
+         $mform->addElement('text', 'config_backgroundimage_customposition',
+             get_string('designercustombgposition', 'block_dash'));
+         $mform->setType('config_backgroundimage_customposition', PARAM_RAW);
+         $mform->addHelpButton('config_backgroundimage_customposition', 'backgroundposition', 'block_dash');
+         $mform->hideIf('config_backgroundimage_customposition', 'config_backgroundimage_position', 'neq', 'custom');
+
+        // Module background image size.
+        $sizes = [
+            'auto' => get_string('auto', 'block_dash'),
+            'cover' => get_string('cover', 'block_dash'),
+            'contain' => get_string('contain', 'block_dash'),
+            'custom' => get_string('strcustom', 'block_dash'),
+        ];
+        $mform->addElement('select', 'config_backgroundimage_size', get_string('backgroundsize',
+            'block_dash'), $sizes);
+        $mform->setType('config_backgroundimage_size', PARAM_RAW);
+        $mform->addHelpButton('config_backgroundimage_size', 'backgroundsize', 'block_dash');
+
+        // Module background image custom size.
+        $mform->addElement('text', 'config_backgroundimage_customsize', get_string('designercustombgsize', 'block_dash'));
+        $mform->setType('config_backgroundimage_customsize', PARAM_RAW);
+        $mform->addHelpButton('config_backgroundimage_customsize', 'backgroundsize', 'block_dash');
+        $mform->hideIf('config_backgroundimage_customsize', 'config_backgroundimage_size', 'neq', 'custom');
+
+        require_once($CFG->dirroot.'/blocks/dash/form/gradientpicker.php');
+        MoodleQuickForm::registerElementType('dashgradientpicker', $CFG->dirroot.'/blocks/dash/form/gradientpicker.php',
+            'moodlequickform_dashgradientpicker');
+
+        $mform->addElement('dashgradientpicker', 'config_backgroundgradient', get_string('backgroundgradient', 'block_dash'),
             ['placeholder' => 'linear-gradient(#e66465, #9198e5)']);
         $mform->setType('config_backgroundgradient', PARAM_TEXT);
         $mform->addHelpButton('config_backgroundgradient', 'backgroundgradient', 'block_dash');
 
-        $mform->addElement('text', 'config_headerfootercolor', get_string('fontcolor', 'block_dash'));
-        $mform->setType('config_headerfootercolor', PARAM_TEXT);
+        require_once($CFG->dirroot.'/blocks/dash/form/element-colorpicker.php');
+        MoodleQuickForm::registerElementType('dashcolorpicker', $CFG->dirroot.'/blocks/dash/form/element-colorpicker.php',
+            'moodlequickform_dashcolorpicker');
+
+        $mform->addElement('dashcolorpicker', 'config_headerfootercolor', get_string('fontcolor', 'block_dash'));
+        $mform->setType('config_headerfootercolor', PARAM_RAW);
         $mform->addHelpButton('config_headerfootercolor', 'fontcolor', 'block_dash');
 
-        $mform->addElement('text', 'config_css[border]', get_string('border', 'block_dash'));
-        $mform->setType('config_css[border]', PARAM_TEXT);
-        $mform->addHelpButton('config_css[border]', 'border', 'block_dash');
+        $mform->addElement('select', 'config_border_option', get_string('border_option', 'block_dash'), [
+            0 => get_string('hidden', 'block_dash'),
+            1 => get_string('visible'),
+        ]);
+        $mform->setType('config_border_option', PARAM_INT);
+        $mform->setDefault('config_border_option', 1);
+        $mform->addHelpButton('config_border_option', 'border_option', 'block_dash');
+
+        $mform->addElement('text', 'config_border', get_string('bordervalue', 'block_dash'));
+        $mform->setType('config_border', PARAM_TEXT);
+        $mform->addHelpButton('config_border', 'border', 'block_dash');
+        $mform->hideIf('config_border', 'config_border_option', 'eq', 0);
 
         $mform->addElement('text', 'config_css[min-height]', get_string('minheight', 'block_dash'));
         $mform->setType('config_css[min-height]', PARAM_TEXT);
@@ -107,6 +188,13 @@ class block_dash_edit_form extends block_edit_form {
         $mform->addElement('editor', 'config_emptystate', get_string('content'), ['rows' => 5]);
         $mform->setType('config_emptystate', PARAM_CLEANHTML);
 
+        $widgetlist = data_source_factory::get_data_source_form_options('widget');
+        foreach ($widgetlist as $id => $source) {
+            if (method_exists($id, 'extend_config_form')) {
+                $id::extend_config_form($mform, $source, $this);
+                $showcustom = true;
+            }
+        }
     }
 
     /**
@@ -122,12 +210,14 @@ class block_dash_edit_form extends block_edit_form {
         $label[] = $mform->createElement('html', html_writer::start_div('datasource-content heading'));
         $label[] = $mform->createElement('html', html_writer::end_div());
 
-        $mform->addGroup($label, 'datasources_label', get_string('choosefeature', 'block_dash'), array(' '), false);
+        $mform->addGroup($label, 'datasources_label', get_string('choosefeature', 'block_dash'), [' '], false);
         $mform->setType('datasources_label', PARAM_TEXT);
 
         if (!isset($config->data_source_idnumber)) {
 
-            self::dash_features_list($mform, $this->block->context);
+            self::dash_features_list($mform, $this->block->context, $this->page);
+            $mform->addElement('hidden', 'config_dash_configure_options', 1);
+            $mform->setType('config_dash_configure_options', PARAM_INT);
 
         } else {
             if ($ds = data_source_factory::build_data_source($config->data_source_idnumber,
@@ -143,28 +233,37 @@ class block_dash_edit_form extends block_edit_form {
         }
     }
 
-    public static function dash_features_list(&$mform, $context) {
-        global $OUTPUT, $PAGE;
+    /**
+     * Data features list.
+     *
+     * @param \moodleform $mform
+     * @param \context $context
+     * @param \moodle_page $page
+     * @return void
+     */
+    public static function dash_features_list(&$mform, $context, $page) {
+        global $OUTPUT;
         // Group of datasources.
         if (has_capability('block/dash:managedatasource', $context)) {
             $datasources = data_source_factory::get_data_source_form_options();
-
             // Description of the datasources.
             $group[] = $mform->createElement('html',
                 html_writer::tag('p', get_string('datasourcedesc', 'block_dash'), ['class' => 'dash-source-desc']));
 
             $group[] = $mform->createElement('html', html_writer::start_div('datasource-content'));
             foreach ($datasources as $id => $source) {
-                $group[] = $mform->createElement('html', html_writer::start_div('datasource-item'));
-                $group[] = $mform->createElement('radio', 'config_data_source_idnumber', '', $source['name'], $id);
-                if ($help = $source['help']) {
-                    $helpcontent = $OUTPUT->help_icon($help['name'], $help['component'], $help['name']);
-                    $group[] = $mform->createElement('html', $helpcontent);
+                if (block_dash_visible_addons($id)) {
+                    $group[] = $mform->createElement('html', html_writer::start_div('datasource-item'));
+                    $group[] = $mform->createElement('radio', 'config_data_source_idnumber', '', $source['name'], $id);
+                    if ($help = $source['help']) {
+                        $helpcontent = $OUTPUT->help_icon($help['name'], $help['component'], $help['name']);
+                        $group[] = $mform->createElement('html', $helpcontent);
+                    }
+                    $group[] = $mform->createElement('html', html_writer::end_div());
                 }
-                $group[] = $mform->createElement('html', html_writer::end_div());
             }
             $group[] = $mform->createElement('html', html_writer::end_div());
-            $mform->addGroup($group, 'datasources', get_string('buildown', 'block_dash'), array(' '), false);
+            $mform->addGroup($group, 'datasources', get_string('buildown', 'block_dash'), [' '], false);
             $mform->setType('datasources', PARAM_TEXT);
             $mform->addHelpButton('datasources', 'buildown', 'block_dash');
         }
@@ -175,17 +274,18 @@ class block_dash_edit_form extends block_edit_form {
             $widgets[] = $mform->createElement('html',
                 html_writer::tag('p', get_string('widgetsdesc', 'block_dash'), ['class' => 'dash-source-desc']));
             $widgets[] = $mform->createElement('html', html_writer::start_div('datasource-content'));
-
             foreach ($widgetlist as $id => $source) {
-                $widgets[] = $mform->createElement('html', html_writer::start_div('datasource-item'));
-                $widgets[] = $mform->createElement('radio', 'config_data_source_idnumber', '', $source['name'], $id);
-                if ($source['help']) {
-                    $widgets[] = $mform->createElement('html', $OUTPUT->help_icon($source['help'], 'block_dash', $source['help']));
+                if (block_dash_visible_addons($id)) {
+                    $widgets[] = $mform->createElement('html', html_writer::start_div('datasource-item'));
+                    $widgets[] = $mform->createElement('radio', 'config_data_source_idnumber', '', $source['name'], $id);
+                    if ($source['help']) {
+                        $widgets[] = $mform->createElement('html', $OUTPUT->help_icon($source['help'], 'block_dash', $source['help']));
+                    }
+                    $widgets[] = $mform->createElement('html', html_writer::end_div());
                 }
-                $widgets[] = $mform->createElement('html', html_writer::end_div());
             }
             $widgets[] = $mform->createElement('html', html_writer::end_div());
-            $mform->addGroup($widgets, 'widgets', get_string('readymatewidgets', 'block_dash'), array(' '), false);
+            $mform->addGroup($widgets, 'widgets', get_string('readymatewidgets', 'block_dash'), [' '], false);
             $mform->setType('widgets', PARAM_TEXT);
             $mform->addHelpButton('widgets', 'readymatewidgets', 'block_dash');
         }
@@ -193,7 +293,6 @@ class block_dash_edit_form extends block_edit_form {
         // Content layout.
         $customfeatures = data_source_factory::get_data_source_form_options('custom');
         if ($customfeatures) {
-            // $customoptions[] = $mform->createElement('html', html_writer::start_div('custom-addon'));
             foreach ($customfeatures as $id => $source) {
                 if ($id::has_capbility($context)) {
                     $id::get_features_config($mform, $source);
@@ -202,7 +301,7 @@ class block_dash_edit_form extends block_edit_form {
             }
             if (isset($showcustom)) {
 
-                $PAGE->requires->js_amd_inline('require(["jquery"], function($) {
+                $page->requires->js_amd_inline('require(["jquery"], function($) {
                         $("body").on("change", "[data-target=\"subsource-config\"] [type=radio]", function(e) {
                             var subConfig;
                             if (subConfig = e.target.closest("[data-target=\"subsource-config\"]")) {
@@ -228,15 +327,31 @@ class block_dash_edit_form extends block_edit_form {
     }
 }
 
+/**
+ * Dash features form to configure the data source or widget.
+ */
 class block_dash_featuresform extends \moodleform {
 
+    /**
+     * Defined the form fields for the datasource selector list.
+     *
+     * @return void
+     */
     public function definition() {
+        // @codingStandardsIgnoreStart
+        global $PAGE;
+        // Ignore the phplint due to block class not allowed to include the PAGE global variable.
+        // @codingStandardsIgnoreEnd
+
         $mform = $this->_form;
 
         $mform->updateAttributes(['class' => 'form-inline']);
         $mform->updateAttributes(['id' => 'dash-configuration']);
 
         $block = $this->_customdata['block'] ?? '';
-        block_dash_edit_form::dash_features_list($mform, $block);
+        // @codingStandardsIgnoreStart
+        // Ignore the phplint due to block class not allowed to include the PAGE global variable.
+        block_dash_edit_form::dash_features_list($mform, $block, $PAGE);
+        // @codingStandardsIgnoreEnd
     }
 }

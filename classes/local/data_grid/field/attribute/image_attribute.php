@@ -39,13 +39,47 @@ class image_attribute extends abstract_field_attribute {
      * @return mixed
      */
     public function transform_data($data, \stdClass $record) {
+
+        if (($url = $this->get_option('customurl')) && ($labelfield = $this->get_option('label_field'))) {
+            $url = $this->update_placeholders($record, urldecode($url));
+            return \html_writer::img($url, $this->get_option('title'), [
+                'class' => 'img-responsive',
+                'role' => 'presentation ',
+            ]);
+        }
+
         if ($data) {
             return \html_writer::img($data, $this->get_option('title'), [
                 'class' => 'img-responsive',
-                'role' => 'presentation '
+                'role' => 'presentation ',
             ]);
         }
 
         return $data;
+    }
+
+    /**
+     * Need custom value for transform data, which table uses the attribute dynamically.
+     *
+     * @return bool
+     */
+    public function is_needs_construct_data() {
+        return true;
+    }
+
+    /**
+     * Set the options before transform the data. this will usefull for dynamic field setup.
+     *
+     * @param string $field
+     * @param string $customvalue
+     *
+     * @return void
+     */
+    public function set_transform_field($field, $customvalue=null) {
+        $this->set_option('label_field', $field);
+
+        if ($customvalue !== null) {
+            $this->set_option('customurl', new \moodle_url($customvalue));
+        }
     }
 }

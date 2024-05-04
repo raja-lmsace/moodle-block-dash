@@ -31,10 +31,9 @@ require_once("$CFG->libdir/externallib.php");
 use block_dash\local\block_builder;
 use block_dash\local\data_source\form\preferences_form;
 use block_dash\output\renderer;
-use core_external\external_api;
-use core_external\external_function_parameters;
-use core_external\external_value;
-use core_external\external_single_structure;
+use block_dash\local\configuration\configuration;
+use block_dash\local\data_source\data_source_factory;
+use external_api;
 
 /**
  * External API class.
@@ -49,16 +48,17 @@ class external extends external_api {
     /**
      * Returns description of get_database_schema_structure() parameters.
      *
-     * @return external_function_parameters
+     * @return \external_function_parameters
      */
     public static function get_block_content_parameters() {
-        return new external_function_parameters([
-            'block_instance_id' => new external_value(PARAM_INT),
-            'filter_form_data' => new external_value(PARAM_RAW),
-            'page' => new external_value(PARAM_INT, 'Paginator page.', VALUE_DEFAULT, 0),
-            'sort_field' => new external_value(PARAM_TEXT, 'Field to sort by', VALUE_DEFAULT, null),
-            'sort_direction' => new external_value(PARAM_TEXT, 'Sort direction of field', VALUE_DEFAULT, null),
-            'pagelayout' => new external_value(PARAM_TEXT, 'pagelayout', VALUE_OPTIONAL),
+        return new \external_function_parameters([
+            'block_instance_id' => new \external_value(PARAM_INT),
+            'filter_form_data' => new \external_value(PARAM_RAW),
+            'page' => new \external_value(PARAM_INT, 'Paginator page.', VALUE_DEFAULT, 0),
+            'sort_field' => new \external_value(PARAM_TEXT, 'Field to sort by', VALUE_DEFAULT, null),
+            'sort_direction' => new \external_value(PARAM_TEXT, 'Sort direction of field', VALUE_DEFAULT, null),
+            'pagelayout' => new \external_value(PARAM_TEXT, 'pagelayout', VALUE_DEFAULT, ''),
+            'pagecontext' => new \external_value(PARAM_INT, 'Page Context', VALUE_DEFAULT, 0),
         ]);
     }
 
@@ -71,6 +71,8 @@ class external extends external_api {
      * @param string $sortfield
      * @param string $sortdirection
      * @param string $pagelayout
+     * @param int $pagecontext
+     *
      * @return array
      * @throws \coding_exception
      * @throws \invalid_parameter_exception
@@ -78,7 +80,7 @@ class external extends external_api {
      * @throws \restricted_context_exception
      */
     public static function get_block_content($blockinstanceid, $filterformdata, $page, $sortfield, $sortdirection,
-        $pagelayout = '') {
+        $pagelayout = '', $pagecontext = 0) {
         global $PAGE, $DB, $OUTPUT, $SITE;
 
         $params = self::validate_parameters(self::get_block_content_parameters(), [
@@ -87,18 +89,24 @@ class external extends external_api {
             'filter_form_data' => $filterformdata,
             'sort_field' => $sortfield,
             'sort_direction' => $sortdirection,
-            'pagelayout' => $pagelayout
+            'pagelayout' => $pagelayout,
+            'pagecontext' => $pagecontext,
         ]);
+
+        if ($pagecontext) {
+            $context = \context::instance_by_id($pagecontext);
+            $PAGE->set_context($context);
+        }
         if ($pagelayout) {
             $PAGE->set_pagelayout($pagelayout);
         }
         $public = false;
         $blockinstance = $DB->get_record('block_instances', ['id' => $params['block_instance_id']]);
         $block = block_instance($blockinstance->blockname, $blockinstance);
-        if (strpos($block->instance->pagetypepattern, 'local-dash-dashboard') !== false) {
-            if ($dashboard = \local_dash\model\dashboard::get_record(
+        if (strpos($block->instance->pagetypepattern, 'dashaddon-dashboard') !== false) {
+            if ($dashboard =  \dashaddon_dashboard\model\dashboard::get_record(
                     ['shortname' => $block->instance->defaultregion])) {
-                if ($dashboard->get('permission') == \local_dash\model\dashboard::PERMISSION_PUBLIC) {
+                if ($dashboard->get('permission') == \dashaddon_dashboard\model\dashboard::PERMISSION_PUBLIC) {
                     $public = true;
                 }
             }
@@ -107,7 +115,7 @@ class external extends external_api {
         if (!$public) {
             // Verify the block created for frontpage. and user not loggedin allow to access the block content.
             list($unused, $course, $cm) = get_context_info_array($block->context->id);
-            if ((isset($course->id)) == $SITE->id && !isloggedin()) {
+            if (isset($course->id) && $course->id == $SITE->id && !isloggedin()) {
                 require_course_login($course);
                 $coursecontext = \context_course::instance($course->id);
                 $PAGE->set_context($coursecontext);
@@ -166,9 +174,9 @@ class external extends external_api {
      * @return \external_description
      */
     public static function get_block_content_returns() {
-        return new external_single_structure([
-            'html' => new external_value(PARAM_RAW),
-            'scripts' => new external_value(PARAM_RAW)
+        return new \external_single_structure([
+            'html' => new \external_value(PARAM_RAW),
+            'scripts' => new \external_value(PARAM_RAW),
         ]);
     }
 
@@ -178,12 +186,12 @@ class external extends external_api {
 
     /**
      * Describes the parameters for submit_create_group_form webservice.
-     * @return external_function_parameters
+     * @return \external_function_parameters
      */
     public static function submit_preferences_form_parameters() {
-        return new external_function_parameters([
-            'contextid' => new external_value(PARAM_INT, 'The context id for the block'),
-            'jsonformdata' => new external_value(PARAM_RAW, 'The form data encoded as a json array')
+        return new \external_function_parameters([
+            'contextid' => new \external_value(PARAM_INT, 'The context id for the block'),
+            'jsonformdata' => new \external_value(PARAM_RAW, 'The form data encoded as a json array'),
         ]);
     }
 
@@ -203,7 +211,7 @@ class external extends external_api {
 
         $params = self::validate_parameters(self::submit_preferences_form_parameters(), [
             'contextid' => $contextid,
-            'jsonformdata' => $jsonformdata
+            'jsonformdata' => $jsonformdata,
         ]);
 
         $context = \context::instance_by_id($params['contextid'], MUST_EXIST);
@@ -212,7 +220,7 @@ class external extends external_api {
         require_capability('block/dash:addinstance', $context);
 
         $serialiseddata = json_decode($params['jsonformdata']);
-        $data = array();
+        $data = [];
         parse_str($serialiseddata, $data);
         $blockinstance = $DB->get_record('block_instances', ['id' => $context->instanceid]);
         $block = block_instance($blockinstance->blockname, $blockinstance);
@@ -226,19 +234,27 @@ class external extends external_api {
             $config->preferences = [];
         }
 
-        $configpreferences = isset($data['config_preferences']) ? $data['config_preferences'] : [];
-        $config->preferences = self::recursive_config_merge($config->preferences, $configpreferences, '');
+        if (!isset($data['config_preferences']) || is_null($data['config_preferences'])) {
+            $data['config_preferences'] = [];
+        }
 
         if (isset($data['config_data_source_idnumber'])) {
             $config->data_source_idnumber = $data['config_data_source_idnumber'];
+            $datasource = data_source_factory::build_data_source($config->data_source_idnumber,
+                $context);
+            if ($datasource) {
+                if (method_exists($datasource, 'set_default_preferences')) {
+                    $datasource->set_default_preferences($data);
+                }
+            }
         }
 
+        $configpreferences = $data['config_preferences'];
+        $config->preferences = self::recursive_config_merge($config->preferences, $configpreferences, '');
         $block->instance_config_save($config);
 
-        // print_r($data);
-
         return [
-            'validationerrors' => false
+            'validationerrors' => false,
         ];
     }
 
@@ -304,8 +320,8 @@ class external extends external_api {
      * @since Moodle 3.0
      */
     public static function submit_preferences_form_returns() {
-        return new external_single_structure([
-            'validationerrors' => new external_value(PARAM_BOOL, 'Were there validation errors', VALUE_REQUIRED),
+        return new \external_single_structure([
+            'validationerrors' => new \external_value(PARAM_BOOL, 'Were there validation errors', VALUE_REQUIRED),
         ]);
     }
 

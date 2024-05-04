@@ -24,13 +24,10 @@
 
 namespace block_dash\local\widget\groups;
 
-use core_external\external_api;
-use core_external\external_function_parameters;
-use core_external\external_value;
-use core_external\external_multiple_structure;
-use core_external\external_single_structure;
-
 defined('MOODLE_INTERNAL') || die('No direct access');
+
+require_once($CFG->libdir . '/externallib.php');
+use external_api;
 
 require_once($CFG->dirroot . '/user/selector/lib.php');
 require_once($CFG->dirroot . '/group/lib.php');
@@ -43,27 +40,27 @@ class external extends external_api {
     /**
      * Get the users details if not assigned to the group.
      *
-     * @return external_function_parameters
+     * @return \external_function_parameters
      */
     public static function get_non_members_parameters() {
 
-        return new external_function_parameters([
-            'query' => new external_value(PARAM_RAW,
+        return new \external_function_parameters([
+            'query' => new \external_value(PARAM_RAW,
                 'Query string (full or partial user full name or other details)'),
-            'groupid' => new external_value(PARAM_INT, 'group id (0 if none)'),
+            'groupid' => new \external_value(PARAM_INT, 'group id (0 if none)'),
         ]);
     }
 
     /**
      * Returns result type for get_relevant_users function.
      *
-     * @return external_description Result type
+     * @return \external_description Result type
      */
     public static function get_non_members_returns() {
-        return new external_multiple_structure(
-                new external_single_structure([
-                    'id' => new external_value(PARAM_INT, 'User id'),
-                    'fullname' => new external_value(PARAM_RAW, 'Full name as text'),
+        return new \external_multiple_structure(
+                new \external_single_structure([
+                    'id' => new \external_value(PARAM_INT, 'User id'),
+                    'fullname' => new \external_value(PARAM_RAW, 'Full name as text'),
                 ]));
     }
 
@@ -93,9 +90,9 @@ class external extends external_api {
         $group = groups_get_group($groupid);
         $courseid = $group->courseid;
         if ($group) {
-            $potentialmembersselector = new \group_non_members_selector('addselect', array(
-                'groupid' => $groupid, 'courseid' => $courseid
-            ));
+            $potentialmembersselector = new \group_non_members_selector('addselect', [
+                'groupid' => $groupid, 'courseid' => $courseid,
+            ]);
             $users = $potentialmembersselector->find_users($query);
             $list = [];
             foreach ($users as $role => $user) {
@@ -117,10 +114,10 @@ class external extends external_api {
      */
     public static function add_members_parameters() {
 
-        return new external_function_parameters(
-            array(
-                'formdata' => new external_value(PARAM_RAW, 'The data from the user notes'),
-            )
+        return new \external_function_parameters(
+            [
+                'formdata' => new \external_value(PARAM_RAW, 'The data from the user notes'),
+            ]
         );
     }
     /**
@@ -129,7 +126,7 @@ class external extends external_api {
      * @return void
      */
     public static function add_members_returns() {
-        return new external_value(PARAM_BOOL, 'Result of members added.');
+        return new \external_value(PARAM_BOOL, 'Result of members added.');
     }
 
     /**
@@ -160,21 +157,21 @@ class external extends external_api {
     /**
      * Prameters definition that helps to leave from the own group.
      *
-     * @return external_function_parameters
+     * @return \external_function_parameters
      */
     public static function leave_group_parameters() {
-        return new external_function_parameters([
-            'groupid' => new external_value(PARAM_INT, 'group id (0 if none)'),
+        return new \external_function_parameters([
+            'groupid' => new \external_value(PARAM_INT, 'group id (0 if none)'),
         ]);
     }
 
     /**
      * Return data of leave group service.
      *
-     * @return external_value
+     * @return \external_value
      */
     public static function leave_group_returns() {
-        return new external_value(PARAM_BOOL, 'Result of members added.');
+        return new \external_value(PARAM_BOOL, 'Result of members added.');
     }
 
     /**
@@ -187,7 +184,7 @@ class external extends external_api {
         global $USER;
 
         ['groupid' => $groupid] = self::validate_parameters(self::leave_group_parameters(), [
-            'groupid' => $groupid
+            'groupid' => $groupid,
         ]);
 
         if ($groupid && isloggedin()) {
@@ -200,11 +197,11 @@ class external extends external_api {
     /**
      * Prameters definition that helps to create groups in the selected course.
      *
-     * @return external_function_parameters
+     * @return \external_function_parameters
      */
     public static function create_group_parameters() {
-        return new external_function_parameters([
-            'formdata' => new external_value(PARAM_RAW, 'The data from the user notes'),
+        return new \external_function_parameters([
+            'formdata' => new \external_value(PARAM_RAW, 'The data from the user notes'),
         ]);
     }
 
@@ -214,7 +211,7 @@ class external extends external_api {
      * @return void
      */
     public static function create_group_returns() {
-        return new external_value(PARAM_BOOL, 'Result of members added.');
+        return new \external_value(PARAM_BOOL, 'Result of members added.');
     }
 
     /**

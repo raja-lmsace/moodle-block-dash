@@ -232,86 +232,67 @@ Feature: Add a dash to an admin pages
     And I check dash css "50% 0%" "#inst149011" "background-position"
     And I check dash css "cover" "#inst149011" "background-size"
 
-    Scenario: Default fields after selecting the data source
-      And I log in as "admin"
+  Scenario: Default fields after selecting the data source
+    And I log in as "admin"
 
-      # Users data source
-      And I navigate to "Appearance > Default Dashboard page" in site administration
-      And I turn dash block editing mode on
-      And I add the "Dash" block
-      And I configure the "New Dash" block
-      And I expand all fieldsets
+    # Users data source
+    And I navigate to "Appearance > Default Dashboard page" in site administration
+    And I turn dash block editing mode on
+    And I add the "Dash" block
+    And I configure the "New Dash" block
+    And I expand all fieldsets
+    And I set the following fields to these values:
+      | Block title | Users |
+    And I press "Save changes"
+    And I click on "Users" "radio"
+    And I click on "Reset Dashboard for all users" "button"
+    And I follow dashboard
+    And I should see "User" in the "Admin" "table_row"
+
+    # Courses data source
+    And I navigate to "Appearance > Default Dashboard page" in site administration
+    And I turn dash block editing mode on
+    And I add the "Dash" block
+    And I configure the "New Dash" block
+    And I expand all fieldsets
+    And I set the following fields to these values:
+      | Block title | Courses |
+    And I press "Save changes"
+    And I click on "Courses" "radio"
+    And I click on "Reset Dashboard for all users" "button"
+    And I follow dashboard
+    And I should see "Category 01" in the "Course 1" "table_row"
+
+    # Dashboards data source
+    And I navigate to "Appearance > Default Dashboard page" in site administration
+    And I turn dash block editing mode on
+    And I add the "Dash" block
+    And I configure the "New Dash" block
+    And I expand all fieldsets
+    And I set the following fields to these values:
+      | Block title | Dashboards |
+    And I press "Save changes"
+    And I click on "Dashboards" "radio"
+    And I click on "Reset Dashboard for all users" "button"
+    And I follow dashboard
+    And I should see "Core dashboard" in the "Core dashboard" "table_row"
+
+    # Badges data source
+    And I navigate to "Badges > Add a new badge" in site administration
       And I set the following fields to these values:
-        | Block title | Users |
-      And I press "Save changes"
-      And I click on "Users" "radio"
-      And I click on "Reset Dashboard for all users" "button"
-      And I follow dashboard
-      And I should see "User" in the "Admin" "table_row"
-      # Then the following should exist in the "Users" table:
-      #   | First name / Last name | Email address          | Last login  |
-      #   | Admin User             | moodle@example.com     | 25/04/24    |
-      #   | Student First          | student1@example.com   |             |
-
-      # Courses data source
-      And I navigate to "Appearance > Default Dashboard page" in site administration
-      And I turn dash block editing mode on
-      And I add the "Dash" block
-      And I configure the "New Dash" block
-      And I expand all fieldsets
-      And I set the following fields to these values:
-        | Block title | Courses |
-      And I press "Save changes"
-      And I click on "Courses" "radio"
-      And I click on "Reset Dashboard for all users" "button"
-      And I follow dashboard
-      And I should see "Category 01" in the "Course 1" "table_row"
-      # Then the following should exist in the "Users" table:
-      #   | First name / Last name | Email address          | Last login  |
-      #   | Admin User             | moodle@example.com     | 25/04/24    |
-      #   | Student First          | student1@example.com   |             |
-
-      # Dashboards data source
-      And I navigate to "Appearance > Default Dashboard page" in site administration
-      And I turn dash block editing mode on
-      And I add the "Dash" block
-      And I configure the "New Dash" block
-      And I expand all fieldsets
-      And I set the following fields to these values:
-        | Block title | Dashboards |
-      And I press "Save changes"
-      And I click on "Dashboards" "radio"
-      And I click on "Reset Dashboard for all users" "button"
-      And I follow dashboard
-      And I should see "Core dashboard" in the "Core dashboard" "table_row"
-      # Then the following should exist in the "Users" table:
-      #   | First name / Last name | Email address          | Last login  |
-      #   | Admin User             | moodle@example.com     | 25/04/24    |
-      #   | Student First          | student1@example.com   |             |
-
-      # Badges data source
-      And I navigate to "Badges > Add a new badge" in site administration
-        And I set the following fields to these values:
-        | Name        | Demo badge             |
-        | Description | Demo badge description |
-      And I upload "/blocks/dash/tests/assets/background.jpg" file to "Background image" filemanager
-      And I press "Create badge"
-      And I navigate to "Appearance > Default Dashboard page" in site administration
-      And I turn dash block editing mode on
-      And I add the "Dash" block
-      And I configure the "New Dash" block
-      And I expand all fieldsets
-      And I set the following fields to these values:
-        | Block title | Badges |
-      And I press "Save changes"
-      And I click on "Badges" "radio"
-      And I click on "Reset Dashboard for all users" "button"
-      And I follow dashboard
-      And I should see "demo" in the "Site Badge" "table_row"
-      # Then the following should exist in the "Users" table:
-      #   | First name / Last name | Email address          | Last login  |
-      #   | Admin User             | moodle@example.com     | 25/04/24    |
-      #   | Student First          | student1@example.com   |             |
-
-
-
+      | Name        | Demo badge             |
+      | Description | Demo badge description |
+    And I upload "/blocks/dash/tests/assets/background.jpg" file to "Background image" filemanager
+    And I press "Create badge"
+    And I navigate to "Appearance > Default Dashboard page" in site administration
+    And I turn dash block editing mode on
+    And I add the "Dash" block
+    And I configure the "New Dash" block
+    And I expand all fieldsets
+    And I set the following fields to these values:
+      | Block title | Badges |
+    And I press "Save changes"
+    And I click on "Badges" "radio"
+    And I click on "Reset Dashboard for all users" "button"
+    And I follow dashboard
+    And I should see "demo" in the "Site Badge" "table_row"

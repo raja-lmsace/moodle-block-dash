@@ -279,9 +279,9 @@ Feature: Add a dash to an admin pages
 
     # Badges data source
     And I navigate to "Badges > Add a new badge" in site administration
-      And I set the following fields to these values:
-      | Name        | Demo badge             |
-      | Description | Demo badge description |
+    And I set the following fields to these values:
+    | Name        | Demo badge             |
+    | Description | Demo badge description |
     And I upload "/blocks/dash/tests/assets/background.jpg" file to "Background image" filemanager
     And I press "Create badge"
     And I navigate to "Appearance > Default Dashboard page" in site administration

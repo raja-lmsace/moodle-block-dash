@@ -23,6 +23,9 @@
  */
 
 namespace block_dash\local\data_grid\field;
+
+defined('MOODLE_INTERNAL') || die();
+
 /**
  * Responsible for creating field definitions on request.
  *

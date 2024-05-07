@@ -325,7 +325,8 @@ class block_dash extends block_base {
 
         if (isset($this->config->border_option)) {
             if ($this->config->border_option) {
-                $bordervalue = ($this->config->border) ? $this->config->border : "1px solid rgba(0,0,0,.125)";
+                $bordervalue = isset($this->config->border) && ($this->config->border) ? $this->config->border
+                    : "1px solid rgba(0,0,0,.125)";
                 $blockcss[] = sprintf('%s: %s;', 'border', $bordervalue);
             } else {
                 $blockcss[] = sprintf('%s: %s;', 'border', "none");

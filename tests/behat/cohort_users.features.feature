@@ -147,7 +147,7 @@ Feature: Dash program to show the list of cohort users
     And I should not see "student1" in the "Users cohort" "block"
     And I should not see "student7" in the "Users cohort" "block"
     And I log out
-#--Users in one of my cohorts-- Enabled condition 2 with cohort 1 
+#--Users in one of my cohorts-- Enabled condition 2 with cohort 1
     And I log in as "admin"
     And I navigate to "Appearance > Default Dashboard page" in site administration
     And I turn dash block editing mode on
@@ -198,4 +198,3 @@ Feature: Dash program to show the list of cohort users
     And I should not see "student1" in the "Users cohort" "block"
     And I should not see "student3" in the "Users cohort" "block"
     And I log out
-

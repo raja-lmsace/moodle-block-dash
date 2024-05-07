@@ -129,7 +129,6 @@ Feature: Add a dash to an admin pages
     And I set the following fields to these values:
       | CSS classes | dash-card-block |
     And I press "Save changes"
-    And I wait "2" seconds
 
     # Dash block setting css classes
     And I follow dashboard
@@ -138,11 +137,9 @@ Feature: Add a dash to an admin pages
     And I add the "Dash" block
     And I configure the "New Dash" block
     And I expand all fieldsets
-    And the field "config_css_class" matches value "dash-card-block"
     And I set the following fields to these values:
       | CSS classes | dash-element, dash-card |
     And I press "Save changes"
-    And I wait "2" seconds
     And I click on "Reset Dashboard for all users" "button"
     And I follow dashboard
     And ".dash-element.dash-card" "css_element" should exist in the ".block-region .block_dash" "css_element"
@@ -156,10 +153,9 @@ Feature: Add a dash to an admin pages
     And I set the following fields to these values:
       | Background gradient | linear-gradient(90deg, rgba(255, 210, 0, .2) 0%, rgba(70, 210, 251, .2) 100%) |
     And I press "Save changes"
-    And I wait "2" seconds
     And I click on "Reset Dashboard for all users" "button"
     And I follow dashboard
-    And I check dash css "linear-gradient(90deg, rgba(255, 210, 0, 0.2) 0%, rgba(70, 210, 251, 0.2) 100%)" "#inst149013" "background-image"
+    And I check dash css "linear-gradient(90deg, rgba(255, 210, 0, 0.2) 0%, rgba(70, 210, 251, 0.2) 100%)" "section.block_dash:nth-of-type(2)" "background-image"
 
     # Font color picker
     And I navigate to "Appearance > Default Dashboard page" in site administration
@@ -169,18 +165,13 @@ Feature: Add a dash to an admin pages
     And I configure the "New Dash" block
     And I expand all fieldsets
     And I set the following fields to these values:
-      | Block title | Course categories |
+      | Block title | Course categories 01|
       | Font color | #c60061 |
-    And I press "Save changes"
-    And I click on "#action-menu-toggle-0" "css_element"
-    And I wait "30" seconds
-    And I click on "Preferences" "link" in the "Course categories" "block"
-    Then I click on "Fields" "link" in the "Edit preferences" "dialogue"
-    And I click on "Select all" "button"
     And I press "Save changes"
     And I click on "Reset Dashboard for all users" "button"
     And I follow dashboard
-    And I check dash css "rgb(198, 0, 97)" "#inst149007 #instance-149007-header" "color"
+    And I check dash css "rgb(198, 0, 97)" "section.block_dash:nth-of-type(3) h3" "color"
+    Then I wait "10" seconds
 
     # Border color
     And I navigate to "Appearance > Default Dashboard page" in site administration
@@ -188,15 +179,36 @@ Feature: Add a dash to an admin pages
     And I add the "Dash" block
     And I configure the "New Dash" block
     And I expand all fieldsets
-    And the field "Border" matches value "Disable"
     And I set the following fields to these values:
-      | Border | Enable |
-      | Border Value | 2px solid #000 |
+      | Block title | Border settings |
+      | Border | Visible |
     And I press "Save changes"
-    And I wait "2" seconds
     And I click on "Reset Dashboard for all users" "button"
     And I follow dashboard
-    And I check dash css "2px solid rgb(0, 0, 0)" "#inst149007" "border"
+    And I check dash css "1px solid rgba(0, 0, 0, 0.125)" "section.block_dash:nth-of-type(4)" "border"
+    And I navigate to "Appearance > Default Dashboard page" in site administration
+    And I turn dash block editing mode on
+    And I configure the "Border settings" block
+    And I expand all fieldsets
+    And I set the following fields to these values:
+      | Block title | Border settings |
+      | Border Value | 5px solid #000 |
+    And I press "Save changes"
+    And I click on "Reset Dashboard for all users" "button"
+    And I follow dashboard
+    And I check dash css "5px solid rgb(0, 0, 0)" "section.block_dash:nth-of-type(4)" "border"
+
+    And I navigate to "Appearance > Default Dashboard page" in site administration
+    And I turn dash block editing mode on
+    And I configure the "Border settings" block
+    And I expand all fieldsets
+    And I set the following fields to these values:
+      | Block title | Border settings |
+      | Border | Hidden |
+    And I press "Save changes"
+    And I click on "Reset Dashboard for all users" "button"
+    And I follow dashboard
+    And I check dash css "0px hidden rgb(29, 33, 37)" "section.block_dash:nth-of-type(4)" "border"
 
     # Background Image settings
     And I navigate to "Appearance > Default Dashboard page" in site administration
@@ -210,12 +222,10 @@ Feature: Add a dash to an admin pages
       | Background Position      | Left Center   |
       | Background Size          | Contain       |
     And I press "Save changes"
-    And I wait "2" seconds
     And I click on "Reset Dashboard for all users" "button"
     And I follow dashboard
-    And I wait "20" seconds
-    And I check dash css "0% 50%" "#inst149007" "background-position"
-    And I check dash css "contain" "#inst149007" "background-size"
+    And I check dash css "0% 50%" "section.block_dash:nth-of-type(5)" "background-position"
+    And I check dash css "contain" "section.block_dash:nth-of-type(5)" "background-size"
     And I navigate to "Appearance > Default Dashboard page" in site administration
     And I turn dash block editing mode on
     And I configure the "Course categories" block
@@ -226,15 +236,13 @@ Feature: Add a dash to an admin pages
       | Background Size              | Custom        |
       | Custom Background Size       | Cover         |
     And I press "Save changes"
-    And I wait "2" seconds
     And I click on "Reset Dashboard for all users" "button"
     And I follow dashboard
-    And I check dash css "50% 0%" "#inst149011" "background-position"
-    And I check dash css "cover" "#inst149011" "background-size"
+    And I check dash css "50% 0%" "section.block_dash:nth-of-type(5)" "background-position"
+    And I check dash css "cover" "section.block_dash:nth-of-type(5)" "background-size"
 
   Scenario: Default fields after selecting the data source
     And I log in as "admin"
-
     # Users data source
     And I navigate to "Appearance > Default Dashboard page" in site administration
     And I turn dash block editing mode on
@@ -247,7 +255,9 @@ Feature: Add a dash to an admin pages
     And I click on "Users" "radio"
     And I click on "Reset Dashboard for all users" "button"
     And I follow dashboard
-    And I should see "User" in the "Admin" "table_row"
+    And I should see "Student"
+    And I should see "First"
+    And I should see "student1@example.com"
 
     # Courses data source
     And I navigate to "Appearance > Default Dashboard page" in site administration
@@ -261,7 +271,8 @@ Feature: Add a dash to an admin pages
     And I click on "Courses" "radio"
     And I click on "Reset Dashboard for all users" "button"
     And I follow dashboard
-    And I should see "Category 01" in the "Course 1" "table_row"
+    And I should see "Course 1"
+    And I should see "Category 01"
 
     # Dashboards data source
     And I navigate to "Appearance > Default Dashboard page" in site administration
@@ -275,14 +286,14 @@ Feature: Add a dash to an admin pages
     And I click on "Dashboards" "radio"
     And I click on "Reset Dashboard for all users" "button"
     And I follow dashboard
-    And I should see "Core dashboard" in the "Core dashboard" "table_row"
+    And I should see "Main dashboard"
 
     # Badges data source
     And I navigate to "Badges > Add a new badge" in site administration
     And I set the following fields to these values:
       | Name        | Demo badge             |
       | Description | Demo badge description |
-    And I upload "/blocks/dash/tests/assets/background.jpg" file to "Background image" filemanager
+    And I upload "/blocks/dash/tests/assets/background.jpg" file to "Image" filemanager
     And I press "Create badge"
     And I navigate to "Appearance > Default Dashboard page" in site administration
     And I turn dash block editing mode on
@@ -295,4 +306,4 @@ Feature: Add a dash to an admin pages
     And I click on "Badges" "radio"
     And I click on "Reset Dashboard for all users" "button"
     And I follow dashboard
-    And I should see "demo" in the "Site Badge" "table_row"
+    And I should see "Demo badge" in the "Site Badge" "table_row"

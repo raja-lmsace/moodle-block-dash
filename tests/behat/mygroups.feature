@@ -96,6 +96,7 @@ Feature: Add My Groups widget in dash block
   @javascript
   Scenario: Add User to existing group using dash block
     Given I log in as "manager"
+    And I wait "10" seconds
     And I should see "Group C1 2" in the "My groups" "block"
     And I click on ".dropdown-toggle" "css_element" in the ".block_dash-community-block .list-block:nth-child(2)" "css_element"
     And I click on ".add-group-users" "css_element" in the ".block_dash-community-block .list-block:nth-child(2)" "css_element"

@@ -170,7 +170,7 @@ Feature: Add a dash to an admin pages
     And I press "Save changes"
     And I click on "Reset Dashboard for all users" "button"
     And I follow dashboard
-    And I check dash css "rgb(198, 0, 97)" "section.block_dash:nth-of-type(3) h3" "color"
+    And I check dash css "rgb(198, 0, 97)" "section.block_dash:nth-of-type(3) h5" "color"
     Then I wait "10" seconds
 
     # Border color
@@ -247,12 +247,12 @@ Feature: Add a dash to an admin pages
     And I navigate to "Appearance > Default Dashboard page" in site administration
     And I turn dash block editing mode on
     And I add the "Dash" block
+    And I click on "Users" "radio"
     And I configure the "New Dash" block
     And I expand all fieldsets
     And I set the following fields to these values:
       | Block title | Users |
     And I press "Save changes"
-    And I click on "Users" "radio"
     And I click on "Reset Dashboard for all users" "button"
     And I follow dashboard
     And I should see "Student"
@@ -263,12 +263,12 @@ Feature: Add a dash to an admin pages
     And I navigate to "Appearance > Default Dashboard page" in site administration
     And I turn dash block editing mode on
     And I add the "Dash" block
+    And I click on "Courses" "radio"
     And I configure the "New Dash" block
     And I expand all fieldsets
     And I set the following fields to these values:
       | Block title | Courses |
     And I press "Save changes"
-    And I click on "Courses" "radio"
     And I click on "Reset Dashboard for all users" "button"
     And I follow dashboard
     And I should see "Course 1"
@@ -278,12 +278,12 @@ Feature: Add a dash to an admin pages
     And I navigate to "Appearance > Default Dashboard page" in site administration
     And I turn dash block editing mode on
     And I add the "Dash" block
+    And I click on "Dashboards" "radio"
     And I configure the "New Dash" block
     And I expand all fieldsets
     And I set the following fields to these values:
       | Block title | Dashboards |
     And I press "Save changes"
-    And I click on "Dashboards" "radio"
     And I click on "Reset Dashboard for all users" "button"
     And I follow dashboard
     And I should see "Main dashboard"
@@ -298,12 +298,12 @@ Feature: Add a dash to an admin pages
     And I navigate to "Appearance > Default Dashboard page" in site administration
     And I turn dash block editing mode on
     And I add the "Dash" block
+    And I click on "Badges" "radio"
     And I configure the "New Dash" block
     And I expand all fieldsets
     And I set the following fields to these values:
       | Block title | Badges |
     And I press "Save changes"
-    And I click on "Badges" "radio"
     And I click on "Reset Dashboard for all users" "button"
     And I follow dashboard
     And I should see "Demo badge" in the "Site Badge" "table_row"

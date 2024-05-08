@@ -169,7 +169,6 @@ Feature: Add a dash to an admin pages
     And I configure the "Border settings" block
     And I expand all fieldsets
     And I set the following fields to these values:
-      | Block title | Border settings |
       | Border Value | 5px solid #000 |
     And I press "Save changes"
     And I click on "Reset Dashboard for all users" "button"
@@ -181,7 +180,6 @@ Feature: Add a dash to an admin pages
     And I configure the "Border settings" block
     And I expand all fieldsets
     And I set the following fields to these values:
-      | Block title | Border settings |
       | Border | Hidden |
     And I press "Save changes"
     And I click on "Reset Dashboard for all users" "button"
@@ -196,7 +194,7 @@ Feature: Add a dash to an admin pages
     And I expand all fieldsets
     And I upload "/blocks/dash/tests/assets/background.jpg" file to "Background image" filemanager
     And I set the following fields to these values:
-      | Block title | Users |
+      | Block title | Users datasource |
       | Background Position      | Left Center   |
       | Background Size          | Contain       |
     And I press "Save changes"
@@ -206,7 +204,7 @@ Feature: Add a dash to an admin pages
     And I check dash css "contain" "section.block_dash:nth-of-type(5)" "background-size"
     And I navigate to "Appearance > Default Dashboard page" in site administration
     And I turn dash block editing mode on
-    And I configure the "Users" block
+    And I configure the "Users datasource" block
     And I expand all fieldsets
     And I set the following fields to these values:
       | Background Position          | Custom        |

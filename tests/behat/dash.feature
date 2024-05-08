@@ -41,7 +41,7 @@ Feature: Add a dash to an admin pages
     Then I configure the "New Dash" block
     And I set the field "Block title" to "Datasource: Users"
     And I set the following fields to these values:
-      | Region | content |
+      | Region       | content  |
     And I press "Save changes"
     Then I should see "Datasource: Users"
     Then I turn editing mode off
@@ -149,8 +149,7 @@ Feature: Add a dash to an admin pages
     And I press "Save changes"
     And I click on "Reset Dashboard for all users" "button"
     And I follow dashboard
-    And I check dash css "rgb(198, 0, 97)" "section.block_dash:nth-of-type(3) h5" "color"
-    Then I wait "10" seconds
+    And I check dash css "#c60061" "section.block_dash:nth-of-type(3) h5" "color"
 
     # Border color
     And I navigate to "Appearance > Default Dashboard page" in site administration

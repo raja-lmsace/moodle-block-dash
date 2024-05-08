@@ -65,7 +65,6 @@ Feature: Dash program to show the list of course categories data
     And I press "Save changes"
     And I click on "Reset Dashboard for all users" "button"
     And I follow dashboard
-    And I wait "10" seconds
     And I should see "Course 1" in the "Category 1" "table_row"
     And "Category 1" "link" should exist in the "Category 1" "table_row"
     And I should see "" in the "Category 1" "table_row"
@@ -155,5 +154,3 @@ Feature: Dash program to show the list of course categories data
     Then "//td[contains(text(), 'background')]" "xpath_element" should exist in the "Category 4" "table_row"
     And I should see "1" in the "Course 4" "table_row"
     And I should see "Course 4" in the "Category 4" "table_row"
-
-    And I wait "10" seconds

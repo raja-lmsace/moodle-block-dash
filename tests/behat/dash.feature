@@ -149,7 +149,7 @@ Feature: Add a dash to an admin pages
     And I press "Save changes"
     And I click on "Reset Dashboard for all users" "button"
     And I follow dashboard
-   And I check dash css "rgb(198, 0, 97)" "section.block_dash:nth-of-type(3) .card-title" "color"
+    And I check dash css "rgb(198, 0, 97)" "section.block_dash:nth-of-type(3) .card-title" "color"
 
     # Border color
     And I navigate to "Appearance > Default Dashboard page" in site administration

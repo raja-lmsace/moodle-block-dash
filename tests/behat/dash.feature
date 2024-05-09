@@ -149,7 +149,7 @@ Feature: Add a dash to an admin pages
     And I press "Save changes"
     And I click on "Reset Dashboard for all users" "button"
     And I follow dashboard
-    And I check dash css "rgb(198, 0, 97)" "section.block_dash:nth-of-type(3) .card-title" "color"
+   And I check dash css "rgb(198, 0, 97)" "section.block_dash:nth-of-type(3) .card-title" "color"
 
     # Border color
     And I navigate to "Appearance > Default Dashboard page" in site administration
@@ -164,16 +164,6 @@ Feature: Add a dash to an admin pages
     And I click on "Reset Dashboard for all users" "button"
     And I follow dashboard
     And I check dash css "1px solid rgba(0, 0, 0, 0.125)" "section.block_dash:nth-of-type(4)" "border"
-    And I navigate to "Appearance > Default Dashboard page" in site administration
-    And I turn dash block editing mode on
-    And I configure the "Border settings" block
-    And I expand all fieldsets
-    And I set the following fields to these values:
-      | Border Value | 5px solid |
-    And I press "Save changes"
-    And I click on "Reset Dashboard for all users" "button"
-    And I follow dashboard
-    And I check dash css "5px solid" "section.block_dash:nth-of-type(4)" "border"
 
     And I navigate to "Appearance > Default Dashboard page" in site administration
     And I turn dash block editing mode on

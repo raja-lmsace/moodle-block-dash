@@ -120,7 +120,7 @@ class behat_block_dash extends behat_base {
     /**
      * Check that the focus mode enable.
      *
-     * @Given /^I check dash css "(?P<color>(?:[^"]|\\")*)" "(?P<selector>(?:[^"]|\\")*)" "(?P<type>(?:[^"]|\\")*)"$/
+     * @Given /^I check dash css "(?P<value>(?:[^"]|\\")*)" "(?P<selector>(?:[^"]|\\")*)" "(?P<type>(?:[^"]|\\")*)"$/
      * @param string $value
      * @param string $selector
      * @param string $type

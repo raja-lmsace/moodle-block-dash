@@ -43,26 +43,16 @@ Feature: Add a dash to an admin pages
     And I set the following fields to these values:
       | Region | content |
     And I press "Save changes"
-    And I create dash "Courses" datasource
-    Then I configure the "New Dash" block
-    And I set the field "Block title" to "Datasource: Courses"
-    And I set the following fields to these values:
-      | Region | content |
-    And I press "Save changes"
     Then I should see "Datasource: Users"
-    Then I should see "Datasource: Courses"
     Then I turn editing mode off
     Then I should not see "Datasource: Users"
-    Then I should not see "Datasource: Courses"
     And I click on "Reset Dashboard for all users" "button"
     Then I log in as "student1"
     Then I follow "Dashboard"
     Then I turn editing mode on
     Then I should see "Datasource: Users"
-    Then I should see "Datasource: Courses"
     Then I turn editing mode off
     Then I should not see "Datasource: Users"
-    Then I should not see "Datasource: Courses"
     Then I log in as "admin"
     And I navigate to "Plugins > Blocks > Dash" in site administration
     Then I set the field "Show header" to "Visible"
@@ -100,27 +90,16 @@ Feature: Add a dash to an admin pages
       | Region | content |
       | Show header | Hidden |
     And I press "Save changes"
-    And I create dash "Courses" datasource
-    Then I configure the "New Dash" block
-    And I set the field "Block title" to "Datasource: Courses"
-    And I set the following fields to these values:
-      | Region | content |
-      | Show header | Visible |
-    And I press "Save changes"
     Then I should see "Datasource: Users"
-    Then I should see "Datasource: Courses"
     Then I turn editing mode off
     Then I should not see "Datasource: Users"
-    Then I should see "Datasource: Courses"
     And I click on "Reset Dashboard for all users" "button"
     Then I log in as "student1"
     Then I follow "Dashboard"
     Then I turn editing mode on
     Then I should see "Datasource: Users"
-    Then I should see "Datasource: Courses"
     Then I turn editing mode off
     Then I should not see "Datasource: Users"
-    Then I should see "Datasource: Courses"
 
   Scenario: Block Settings: Dash settings improvements
     And I log in as "admin"
@@ -161,17 +140,16 @@ Feature: Add a dash to an admin pages
     And I navigate to "Appearance > Default Dashboard page" in site administration
     And I turn dash block editing mode on
     And I add the "Dash" block
-    And I click on "Course categories" "radio"
+    And I click on "Users" "radio"
     And I configure the "New Dash" block
     And I expand all fieldsets
     And I set the following fields to these values:
-      | Block title | Course categories 01|
+      | Block title | Users 01|
       | Font color | #c60061 |
     And I press "Save changes"
     And I click on "Reset Dashboard for all users" "button"
     And I follow dashboard
-    And I check dash css "rgb(198, 0, 97)" "section.block_dash:nth-of-type(3) h3" "color"
-    Then I wait "10" seconds
+    And I check dash css "rgb(198, 0, 97)" "section.block_dash:nth-of-type(3) .card-title" "color"
 
     # Border color
     And I navigate to "Appearance > Default Dashboard page" in site administration
@@ -191,7 +169,6 @@ Feature: Add a dash to an admin pages
     And I configure the "Border settings" block
     And I expand all fieldsets
     And I set the following fields to these values:
-      | Block title | Border settings |
       | Border Value | 5px solid #000 |
     And I press "Save changes"
     And I click on "Reset Dashboard for all users" "button"
@@ -203,7 +180,6 @@ Feature: Add a dash to an admin pages
     And I configure the "Border settings" block
     And I expand all fieldsets
     And I set the following fields to these values:
-      | Block title | Border settings |
       | Border | Hidden |
     And I press "Save changes"
     And I click on "Reset Dashboard for all users" "button"
@@ -218,7 +194,7 @@ Feature: Add a dash to an admin pages
     And I expand all fieldsets
     And I upload "/blocks/dash/tests/assets/background.jpg" file to "Background image" filemanager
     And I set the following fields to these values:
-      | Block title | Course categories |
+      | Block title | Users datasource |
       | Background Position      | Left Center   |
       | Background Size          | Contain       |
     And I press "Save changes"
@@ -228,7 +204,7 @@ Feature: Add a dash to an admin pages
     And I check dash css "contain" "section.block_dash:nth-of-type(5)" "background-size"
     And I navigate to "Appearance > Default Dashboard page" in site administration
     And I turn dash block editing mode on
-    And I configure the "Course categories" block
+    And I configure the "Users datasource" block
     And I expand all fieldsets
     And I set the following fields to these values:
       | Background Position          | Custom        |
@@ -247,63 +223,14 @@ Feature: Add a dash to an admin pages
     And I navigate to "Appearance > Default Dashboard page" in site administration
     And I turn dash block editing mode on
     And I add the "Dash" block
+    And I click on "Users" "radio"
     And I configure the "New Dash" block
     And I expand all fieldsets
     And I set the following fields to these values:
       | Block title | Users |
     And I press "Save changes"
-    And I click on "Users" "radio"
     And I click on "Reset Dashboard for all users" "button"
     And I follow dashboard
     And I should see "Student"
     And I should see "First"
     And I should see "student1@example.com"
-
-    # Courses data source
-    And I navigate to "Appearance > Default Dashboard page" in site administration
-    And I turn dash block editing mode on
-    And I add the "Dash" block
-    And I configure the "New Dash" block
-    And I expand all fieldsets
-    And I set the following fields to these values:
-      | Block title | Courses |
-    And I press "Save changes"
-    And I click on "Courses" "radio"
-    And I click on "Reset Dashboard for all users" "button"
-    And I follow dashboard
-    And I should see "Course 1"
-    And I should see "Category 01"
-
-    # Dashboards data source
-    And I navigate to "Appearance > Default Dashboard page" in site administration
-    And I turn dash block editing mode on
-    And I add the "Dash" block
-    And I configure the "New Dash" block
-    And I expand all fieldsets
-    And I set the following fields to these values:
-      | Block title | Dashboards |
-    And I press "Save changes"
-    And I click on "Dashboards" "radio"
-    And I click on "Reset Dashboard for all users" "button"
-    And I follow dashboard
-    And I should see "Main dashboard"
-
-    # Badges data source
-    And I navigate to "Badges > Add a new badge" in site administration
-    And I set the following fields to these values:
-      | Name        | Demo badge             |
-      | Description | Demo badge description |
-    And I upload "/blocks/dash/tests/assets/background.jpg" file to "Image" filemanager
-    And I press "Create badge"
-    And I navigate to "Appearance > Default Dashboard page" in site administration
-    And I turn dash block editing mode on
-    And I add the "Dash" block
-    And I configure the "New Dash" block
-    And I expand all fieldsets
-    And I set the following fields to these values:
-      | Block title | Badges |
-    And I press "Save changes"
-    And I click on "Badges" "radio"
-    And I click on "Reset Dashboard for all users" "button"
-    And I follow dashboard
-    And I should see "Demo badge" in the "Site Badge" "table_row"

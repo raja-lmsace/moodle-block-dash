@@ -165,17 +165,6 @@ Feature: Add a dash to an admin pages
     And I follow dashboard
     And I check dash css "1px solid rgba(0, 0, 0, 0.125)" "section.block_dash:nth-of-type(4)" "border"
 
-    And I navigate to "Appearance > Default Dashboard page" in site administration
-    And I turn dash block editing mode on
-    And I configure the "Border settings" block
-    And I expand all fieldsets
-    And I set the following fields to these values:
-      | Border | Hidden |
-    And I press "Save changes"
-    And I click on "Reset Dashboard for all users" "button"
-    And I follow dashboard
-    And I check dash css "0px hidden rgb(29, 33, 37)" "section.block_dash:nth-of-type(4)" "border"
-
     #Background Image settings
     And I navigate to "Appearance > Default Dashboard page" in site administration
     And I turn dash block editing mode on

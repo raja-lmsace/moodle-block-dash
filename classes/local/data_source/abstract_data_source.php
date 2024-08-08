@@ -101,11 +101,6 @@ abstract class abstract_data_source implements data_source_interface, \templatab
     private $tables = [];
 
     /**
-     * @var int
-     */
-    protected $count;
-
-    /**
      * Constructor.
      *
      * @param \context $context
@@ -187,11 +182,11 @@ abstract class abstract_data_source implements data_source_interface, \templatab
 
         if ($this->paginator == null) {
             $this->paginator = new paginator(function () {
-                $this->count = $this->get_data_records_count();
+                $count = $this->get_query()->count($this->count_by_uniqueid());
                 if ($maxlimit = $this->get_max_limit()) {
-                    return $maxlimit < $this->count ? $maxlimit : $this->count;
+                    return $maxlimit < $count ? $maxlimit : $count;
                 }
-                return $this->count;
+                return $count;
             }, 0, $perpage);
         }
 
@@ -725,10 +720,12 @@ abstract class abstract_data_source implements data_source_interface, \templatab
     }
 
     /**
-     * Get a data source table records count
+     * Count a data record by uniqueid.
+     *
+     * @return boolean
      */
-    public function get_data_records_count() {
-        return $this->get_query()->count();
+    public function count_by_uniqueid() {
+        return false;
     }
 
 }

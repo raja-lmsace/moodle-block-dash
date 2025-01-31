@@ -127,7 +127,7 @@
     #---Set User i manage in conditions---#
     And I open the "Users" block preference
     And I click on "Conditions" "link"
-    And I set the field "config_preferences[filters][parentrole][enabled]" to "1"
+    And I set the field "config_preferences[filters][parentrole][enabled]" to "1" 
     And I press "Save changes"
     And I press "Reset Dashboard for all users"
     And I log out

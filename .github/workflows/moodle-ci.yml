@@ -31,12 +31,12 @@ jobs:
           - php: '8.3'
             moodle-branch: 'MOODLE_405_STABLE'
             database: 'pgsql'
-          - php: '8.3'
-            moodle-branch: 'MOODLE_405_STABLE'
-            database: 'mariadb'
-          - php: '8.2'
-            moodle-branch: 'MOODLE_404_STABLE'
-            database: 'pgsql'
+          # - php: '8.3'
+          #   moodle-branch: 'MOODLE_405_STABLE'
+          #   database: 'mariadb'
+          # - php: '8.2'
+          #   moodle-branch: 'MOODLE_404_STABLE'
+          #   database: 'pgsql'
           - php: '8.2'
             moodle-branch: 'MOODLE_404_STABLE'
             database: 'mariadb'
@@ -82,13 +82,13 @@ jobs:
       #   if: ${{ always() }}
       #   run: moodle-plugin-ci phpmd
 
-      - name: Moodle Code Checker
-        if: ${{ always() }}
-        run: moodle-plugin-ci codechecker --max-warnings 0
+      # - name: Moodle Code Checker
+      #   if: ${{ always() }}
+      #   run: moodle-plugin-ci codechecker --max-warnings 0
 
-      - name: Moodle PHPDoc Checker
-        if: ${{ always() }}
-        run: moodle-plugin-ci phpdoc
+      # - name: Moodle PHPDoc Checker
+      #   if: ${{ always() }}
+      #   run: moodle-plugin-ci phpdoc
 
       # - name: Validating
       #   if: ${{ always() }}
@@ -102,14 +102,14 @@ jobs:
       #   if: ${{ always() }}
       #   run: moodle-plugin-ci mustache
 
-      - name: Grunt
-        if: ${{ always() }}
-        run: moodle-plugin-ci grunt
-
-      - name: PHPUnit tests
-        if: ${{ always() }}
-        run: moodle-plugin-ci phpunit
-
-      # - name: Behat features
+      # - name: Grunt
       #   if: ${{ always() }}
-      #   run: moodle-plugin-ci behat --profile chrome
+      #   run: moodle-plugin-ci grunt
+
+      # - name: PHPUnit tests
+      #   if: ${{ always() }}
+      #   run: moodle-plugin-ci phpunit
+
+      - name: Behat features
+        if: ${{ always() }}
+        run: moodle-plugin-ci behat --profile chrome

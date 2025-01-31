@@ -449,31 +449,27 @@ class builder {
         return $DB->get_records_sql($sql, $params, $this->get_limitfrom(), $this->get_limitnum());
     }
 
-
-    /**
-     * Return the all records from this query
-     *
-     * @return array
-     * @throws dml_exception
-     * @throws exception\invalid_operator_exception
-     */
-    public function get_all_records_query() {
-        global $DB;
-
-        [$sql, $params] = $this->get_sql_and_params();
-        return $DB->get_records_sql($sql, $params);
-    }
-
     /**
      * Get number of records this query will return.
      *
+     * @param int $isunique Counted by unique id.
      * @return int
      * @throws dml_exception
      * @throws exception\invalid_operator_exception
      */
-    public function count(): int {
+    public function count($isunique): int {
+        global $DB;
         $builder = clone $this;
-        $builder->set_selects(['count' => 'COUNT(DISTINCT ' . $this->tablealias . '.id)']);
+
+        if ($isunique) {
+            $builder->set_selects([
+                'uni' => $DB->sql_concat('MAX(cm.id)', 'MAX(u.id)', 'MAX(c.id)', 'MAX(cc.id)'),
+                'count' => 'COUNT(*)']
+            );
+        } else {
+            $builder->set_selects(['count' => 'COUNT(DISTINCT ' . $this->tablealias . '.id)']);
+        }
+
         $builder->limitfrom(0)->limitnum(0)->remove_orderby();
         if (!$records = $builder->query()) {
             return 0;

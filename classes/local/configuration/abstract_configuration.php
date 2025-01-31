@@ -49,7 +49,7 @@ abstract class abstract_configuration implements configuration_interface {
      * @param \context $context
      * @param data_source_interface|null $datasource
      */
-    protected function __construct(\context $context, data_source_interface $datasource) {
+    protected function __construct(\context $context, data_source_interface $datasource = null) {
         $this->context = $context;
         $this->datasource = $datasource;
     }

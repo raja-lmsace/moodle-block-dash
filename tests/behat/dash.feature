@@ -135,7 +135,7 @@ Feature: Add a dash to an admin pages
     And I press "Save changes"
     And I click on "Reset Dashboard for all users" "button"
     And I follow dashboard
-    And I check dash css "linear-gradient(90deg, rgba(255, 210, 0, 0.2) 0%, rgba(70, 210, 251, 0.2) 100%)" "section.block_dash:nth-of-type(2)" "background-image"
+    And I check dash css "linear-gradient(90deg, rgba(255, 210, 0, 0.2) 0%, rgba(70, 210, 251, 0.2) 100%)" "section.block_dash:nth-of-type(1)" "background-image"
 
     # Font color picker
     And I navigate to "Appearance > Default Dashboard page" in site administration

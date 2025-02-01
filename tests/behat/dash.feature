@@ -103,25 +103,25 @@ Feature: Add a dash to an admin pages
 
   Scenario: Block Settings: Dash settings improvements
     And I log in as "admin"
-    # #General setting css classes
-    # And I navigate to "Plugins > Blocks > Dash" in site administration
-    # And I set the following fields to these values:
-    #   | CSS Class | dash-card-block |
-    # And I press "Save changes"
+    # General setting css classes
+    And I navigate to "Plugins > Blocks > Dash" in site administration
+    And I set the following fields to these values:
+      | CSS Class | dash-card-block |
+    And I press "Save changes"
 
-    # # Dash block setting css classes
-    # And I follow dashboard
-    # And I navigate to "Appearance > Default Dashboard page" in site administration
-    # And I turn dash block editing mode on
-    # And I add the "Dash" block
-    # And I configure the "New Dash" block
-    # And I expand all fieldsets
-    # And I set the following fields to these values:
-    #   | CSS Class | dash-element, dash-card |
-    # And I press "Save changes"
-    # And I click on "Reset Dashboard for all users" "button"
-    # And I follow dashboard
-    # And ".dash-element.dash-card" "css_element" should exist in the ".block-region .block_dash" "css_element"
+    # Dash block setting css classes
+    And I follow dashboard
+    And I navigate to "Appearance > Default Dashboard page" in site administration
+    And I turn dash block editing mode on
+    And I add the "Dash" block
+    And I configure the "New Dash" block
+    And I expand all fieldsets
+    And I set the following fields to these values:
+      | CSS Class | dash-element, dash-card |
+    And I press "Save changes"
+    And I click on "Reset Dashboard for all users" "button"
+    And I follow dashboard
+    And ".dash-element.dash-card" "css_element" should exist in the ".block-region .block_dash" "css_element"
 
     # Gradient color
     And I navigate to "Appearance > Default Dashboard page" in site administration
@@ -135,36 +135,36 @@ Feature: Add a dash to an admin pages
     And I press "Save changes"
     And I click on "Reset Dashboard for all users" "button"
     And I follow dashboard
-    And I check dash css "linear-gradient(90deg, rgba(255, 210, 0, 0.2) 0%, rgba(70, 210, 251, 0.2) 100%)" "section.block_dash:nth-of-type(1)" "background-image"
+    And I check dash css "linear-gradient(90deg, rgba(255, 210, 0, 0.2) 0%, rgba(70, 210, 251, 0.2) 100%)" "section.block_dash:nth-of-type(2)" "background-image"
 
-    # # Font color picker
-    # And I navigate to "Appearance > Default Dashboard page" in site administration
-    # And I turn dash block editing mode on
-    # And I add the "Dash" block
-    # And I click on "Users" "radio"
-    # And I configure the "New Dash" block
-    # And I expand all fieldsets
-    # And I set the following fields to these values:
-    #   | Block title | Users 01|
-    #   | Font color | #c60061 |
-    # And I press "Save changes"
-    # And I click on "Reset Dashboard for all users" "button"
-    # And I follow dashboard
-    # And I check dash css "rgb(198, 0, 97)" "section.block_dash:nth-of-type(3) .card-title" "color"
+    # Font color picker
+    And I navigate to "Appearance > Default Dashboard page" in site administration
+    And I turn dash block editing mode on
+    And I add the "Dash" block
+    And I click on "Users" "radio"
+    And I configure the "New Dash" block
+    And I expand all fieldsets
+    And I set the following fields to these values:
+      | Block title | Users 01|
+      | Font color | #c60061 |
+    And I press "Save changes"
+    And I click on "Reset Dashboard for all users" "button"
+    And I follow dashboard
+    And I check dash css "rgb(198, 0, 97)" "section.block_dash:nth-of-type(3) .card-title" "color"
 
-    # # Border color
-    # And I navigate to "Appearance > Default Dashboard page" in site administration
-    # And I turn dash block editing mode on
-    # And I add the "Dash" block
-    # And I configure the "New Dash" block
-    # And I expand all fieldsets
-    # And I set the following fields to these values:
-    #   | Block title | Border settings |
-    #   | Border | Visible |
-    # And I press "Save changes"
-    # And I click on "Reset Dashboard for all users" "button"
-    # And I follow dashboard
-    # And I check dash css "1px solid rgba(0, 0, 0, 0.125)" "section.block_dash:nth-of-type(4)" "border"
+    # Border color
+    And I navigate to "Appearance > Default Dashboard page" in site administration
+    And I turn dash block editing mode on
+    And I add the "Dash" block
+    And I configure the "New Dash" block
+    And I expand all fieldsets
+    And I set the following fields to these values:
+      | Block title | Border settings |
+      | Border | Visible |
+    And I press "Save changes"
+    And I click on "Reset Dashboard for all users" "button"
+    And I follow dashboard
+    And I check dash css "1px solid rgba(0, 0, 0, 0.125)" "section.block_dash:nth-of-type(4)" "border"
 
   Scenario: Default fields after selecting the data source
     And I log in as "admin"

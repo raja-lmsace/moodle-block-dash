@@ -106,7 +106,7 @@ Feature: Add a dash to an admin pages
     #General setting css classes
     And I navigate to "Plugins > Blocks > Dash" in site administration
     And I set the following fields to these values:
-      | CSS classes | dash-card-block |
+      | CSS Class | dash-card-block |
     And I press "Save changes"
 
     # Dash block setting css classes
@@ -117,7 +117,7 @@ Feature: Add a dash to an admin pages
     And I configure the "New Dash" block
     And I expand all fieldsets
     And I set the following fields to these values:
-      | CSS classes | dash-element, dash-card |
+      | CSS Class | dash-element, dash-card |
     And I press "Save changes"
     And I click on "Reset Dashboard for all users" "button"
     And I follow dashboard

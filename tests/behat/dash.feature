@@ -140,7 +140,7 @@ Feature: Add a dash to an admin pages
     And I expand all fieldsets
     And I set the following fields to these values:
       | Block title | Border settings |
-      | Border | Visible |
+      | Show border | Visible |
     And I press "Save changes"
     And I click on "Reset Dashboard for all users" "button"
     And I follow dashboard
@@ -161,11 +161,12 @@ Feature: Add a dash to an admin pages
     And I configure the "New Dash" block
     And I expand all fieldsets
     And I set the following fields to these values:
+      | Block title | CSS classes settings |
       | CSS Class | dash-element, dash-card |
     And I press "Save changes"
     And I click on "Reset Dashboard for all users" "button"
     And I follow dashboard
-    And ".dash-element.dash-card" "css_element" should exist in the ".block-region .block_dash" "css_element"
+    And ".dash-element.dash-card" "css_element" should exist in the "section.block_dash:nth-of-type(4)" "css_element"
 
   # Scenario: Default fields after selecting the data source
   #   And I log in as "admin"

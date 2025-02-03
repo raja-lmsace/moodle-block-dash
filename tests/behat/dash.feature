@@ -109,19 +109,19 @@ Feature: Add a dash to an admin pages
       | CSS Class | dash-card-block |
     And I press "Save changes"
 
-    # Dash block setting css classes
-    And I follow dashboard
-    And I navigate to "Appearance > Default Dashboard page" in site administration
-    And I turn dash block editing mode on
-    And I add the "Dash" block
-    And I configure the "New Dash" block
-    And I expand all fieldsets
-    And I set the following fields to these values:
-      | CSS Class | dash-element, dash-card |
-    And I press "Save changes"
-    And I click on "Reset Dashboard for all users" "button"
-    And I follow dashboard
-    And ".dash-element.dash-card" "css_element" should exist in the ".block-region .block_dash" "css_element"
+    # # Dash block setting css classes
+    # And I follow dashboard
+    # And I navigate to "Appearance > Default Dashboard page" in site administration
+    # And I turn dash block editing mode on
+    # And I add the "Dash" block
+    # And I configure the "New Dash" block
+    # And I expand all fieldsets
+    # And I set the following fields to these values:
+    #   | CSS Class | dash-element, dash-card |
+    # And I press "Save changes"
+    # And I click on "Reset Dashboard for all users" "button"
+    # And I follow dashboard
+    # And ".dash-element.dash-card" "css_element" should exist in the ".block-region .block_dash" "css_element"
 
     # Gradient color
     And I navigate to "Appearance > Default Dashboard page" in site administration

@@ -264,10 +264,28 @@ class block_dash_edit_form extends block_edit_form {
             $mform->addHelpButton('config_restrict_coursecompletion', 'restrictbycoursecompletion', 'block_dash');
 
             // Course grade.
-            $mform->addElement('text', 'config_restrict_grade', get_string('restrictbygrade', 'block_dash'));
-            $mform->addRule('config_restrict_grade', null, 'numeric', null, 'client');
-            $mform->setType('config_restrict_grade', PARAM_INT);
-            $mform->addHelpButton('config_restrict_grade', 'restrictbygrade', 'block_dash');
+            $graderange = [
+                'none' => get_string('none'),
+                'lowerthan' => get_string('lowerthan', 'block_dash'),
+                'higherthan' => get_string('higherthan', 'block_dash'),
+                'between' => get_string('between', 'block_dash'),
+            ];
+            $mform->addElement('select', 'config_restrict_graderange', get_string('restrictbygrade', 'block_dash'), $graderange);
+            $mform->addHelpButton('config_restrict_graderange', 'restrictbygrade', 'block_dash');
+
+            require_once($CFG->dirroot.'/blocks/dash/form/element-range.php');
+            MoodleQuickForm::registerElementType('dashrange', $CFG->dirroot.'/blocks/dash/form/element-range.php',
+            'moodlequickform_dashrange');
+
+            $mform->addElement('dashrange', 'config_restrict_grademin', '');
+            $mform->setType('config_restrict_grademin', PARAM_INT);
+            $mform->addRule('config_restrict_grademin', null, 'numeric', null, 'client');
+            $mform->hideIf('config_restrict_grademin', 'config_restrict_graderange', 'eq', 'none');
+
+            $mform->addElement('dashrange', 'config_restrict_grademax', '');
+            $mform->setType('config_restrict_grademax', PARAM_INT);
+            $mform->addRule('config_restrict_grademax', null, 'numeric', null, 'client');
+            $mform->hideIf('config_restrict_grademax', 'config_restrict_graderange', 'neq', 'between');
 
             // Activity completion status.
             $completionoptions = [
@@ -399,29 +417,37 @@ class block_dash_edit_form extends block_edit_form {
             $mform->addHelpButton('widgets', 'readymatewidgets', 'block_dash');
         }
 
-        // Content layout.
-        $customfeatures = data_source_factory::get_data_source_form_options('custom');
-        if ($customfeatures) {
-            foreach ($customfeatures as $id => $source) {
-                if ($id::has_capbility($context)) {
-                    $id::get_features_config($mform, $source);
-                    $showcustom = true;
-                }
-            }
-            if (isset($showcustom)) {
+        $contentaddon = 0;
 
-                $page->requires->js_amd_inline('require(["jquery"], function($) {
-                        $("body").on("change", "[data-target=\"subsource-config\"] [type=radio]", function(e) {
-                            var subConfig;
-                            if (subConfig = e.target.closest("[data-target=\"subsource-config\"]")) {
-                                if (subConfig.parentNode !== null) {
-                                    var dataSource = subConfig.parentNode.querySelector("[name=\"config_data_source_idnumber\"]");
-                                    dataSource.click(); // = true;
+        // Content layout.
+        if (block_dash_has_pro()) {
+            $contentaddon = get_config('dashaddon_content', 'enabled');
+        }
+
+        if ($contentaddon && !in_array('content', block_dash_disabled_addons_list())) {
+            $customfeatures = data_source_factory::get_data_source_form_options('custom');
+            if ($customfeatures) {
+                foreach ($customfeatures as $id => $source) {
+                    if ($id::has_capbility($context)) {
+                        $id::get_features_config($mform, $source);
+                        $showcustom = true;
+                    }
+                }
+                if (isset($showcustom)) {
+
+                    $page->requires->js_amd_inline('require(["jquery"], function($) {
+                            $("body").on("change", "[data-target=\"subsource-config\"] [type=radio]", function(e) {
+                                var subConfig;
+                                if (subConfig = e.target.closest("[data-target=\"subsource-config\"]")) {
+                                    if (subConfig.parentNode !== null) {
+                                        var data = subConfig.parentNode.querySelector("[name=\"config_data_source_idnumber\"]");
+                                        data.click(); // = true;
+                                    }
                                 }
-                            }
-                        });
-                    })'
-                );
+                            });
+                        })'
+                    );
+                }
             }
         }
     }

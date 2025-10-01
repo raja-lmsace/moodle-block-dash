@@ -38,7 +38,6 @@ use block_dash\local\data_grid\field\attribute\context_attribute;
  * @package block_dash
  */
 class standard_strategy implements data_strategy_interface {
-
     /**
      * Convert records.
      *
@@ -71,10 +70,6 @@ class standard_strategy implements data_strategy_interface {
             }
 
             $griddata->add_child_collection('rows', $row);
-        }
-
-        if (method_exists($records, 'close')) {
-            $records->close();
         }
 
         return $griddata;

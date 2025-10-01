@@ -38,7 +38,6 @@ use block_dash\local\dash_framework\structure\field_interface;
  * @package block_dash
  */
 class grouped_strategy implements data_strategy_interface {
-
     /**
      * @var field_interface
      */
@@ -99,11 +98,6 @@ class grouped_strategy implements data_strategy_interface {
                 $sections[$groupby]->add_data(new field('label', $label, $fielddefinition->get_visibility()));
             }
             $sections[$groupby]->add_child_collection('rows', $row);
-        }
-
-        if (method_exists($records, 'close')) {
-            // Close the recordset to free resources.
-            $records->close();
         }
 
         foreach ($sections as $section) {

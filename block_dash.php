@@ -34,7 +34,6 @@ require_once("$CFG->libdir/filelib.php");
  * Dash block class.
  */
 class block_dash extends block_base {
-
     /**
      * Initialize block instance.
      *

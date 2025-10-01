@@ -58,8 +58,11 @@ foreach (json_decode($filterformdata, true) as $filter) {
         ->get_filter_collection()
         ->apply_filter($filter['name'], $filter['value']);
 }
-$bbdownload->get_configuration()->get_data_source()->get_paginator()->set_current_page($currentpage);
+
 $bbdownloadsource = $bbdownload->get_configuration()->get_data_source();
+$bbdownloadsource->before_data();
+$bbdownloadsource->get_query()->limitfrom(0)->limitnum(0);
+
 $file = $bbdownload->get_configuration()->get_data_source()->get_name();
 $filename = $file . "_" . get_string('strdatasource', 'block_dash');
 if ($download == "xls") {
@@ -121,5 +124,3 @@ if ($download == "xls") {
     }
     $csvexport->download_file();
 }
-
-

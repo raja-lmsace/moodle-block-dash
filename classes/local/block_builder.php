@@ -37,7 +37,6 @@ use moodle_exception;
  * @package block_dash
  */
 class block_builder {
-
     /**
      * @var configuration_interface
      */
@@ -87,8 +86,6 @@ class block_builder {
         return false;
     }
 
-
-
     /**
      * Get content object for block instance.
      *
@@ -137,7 +134,9 @@ class block_builder {
             $data += [
                 'preloaded' => $preload,
                 'editing' => $editing,
+                'sortirdirections' => $bb->get_configuration()->get_data_source()->get_sorting(),
             ];
+
             if (isset($this->blockinstance->config->header_content)) {
                 $data['header_content'] = format_text($this->blockinstance->config->header_content['text'],
                         $this->blockinstance->config->header_content['format'], ['noclean' => true]);
@@ -191,5 +190,4 @@ class block_builder {
     public static function create(\block_base $blockinstance) {
         return new block_builder($blockinstance);
     }
-
 }

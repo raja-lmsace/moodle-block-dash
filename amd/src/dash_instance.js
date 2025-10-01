@@ -2,7 +2,9 @@ define(['jquery', 'jqueryui', 'core/log', 'core/ajax', 'core/notification', 'cor
     'block_dash/preferences_modal', 'block_dash/datepicker', 'block_dash/select2', 'core/fragment', 'core/templates'],
     function ($, UI, Log, Ajax, Notification, ModalEvents, PreferencesModal, DatePicker, Select2, Fragment, Templates) {
 
-        var DashInstance = function (root, blockInstanceId, blockContextid, editing, istotara, pagelayout, pagecontext, sortDirections = {}) {
+        var DashInstance = function (root, blockInstanceId, blockContextid, editing, istotara, pagelayout,
+            pagecontext, sortDirections = {}) {
+
             this.root = $(root);
             this.blockInstanceId = blockInstanceId;
             this.blockContextid = blockContextid;
@@ -364,7 +366,7 @@ define(['jquery', 'jqueryui', 'core/log', 'core/ajax', 'core/notification', 'cor
                 this.getRoot().find('.ajax-pagination').html(response.html);
             }.bind(this)).catch(Notification.exception);
 
-        }
+        };
 
         return DashInstance;
     });

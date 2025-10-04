@@ -478,7 +478,7 @@ class block_dash_featuresform extends \moodleform {
 
         $mform = $this->_form;
 
-        $mform->updateAttributes(['class' => 'form-control']);
+        $mform->updateAttributes(['class' => 'form-inline']);
         $mform->updateAttributes(['id' => 'dash-configuration']);
 
         $block = $this->_customdata['block'] ?? '';

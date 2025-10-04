@@ -24,8 +24,6 @@ define(['jquery', 'jqueryui', 'core/log', 'core/ajax', 'core/notification', 'cor
 
         DashInstance.prototype.init = function () {
 
-            Log.debug('Initializing dash instance', this);
-
             // Select datasource for configuration.
             if (this.getRoot().find('.dash-configuration-form').length > 0) {
 

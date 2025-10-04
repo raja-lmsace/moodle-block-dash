@@ -111,9 +111,9 @@ class behat_block_dash extends behat_base {
         // Note that since $blockname may be either block name or CSS class, we can not use the exact label of "Configure" link.
         $this->execute("behat_blocks::i_open_the_blocks_action_menu", $this->escape($blockname));
 
-        // $this->execute('behat_general::i_click_on_in_the',
-        //     ["Preference", "link", $this->escape($blockname), "block"]
-        // );
+        $this->execute('behat_general::i_click_on_in_the',
+            ["Preferences", "link", $this->escape($blockname), "block"]
+        );
     }
 
     /**

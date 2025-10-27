@@ -29,6 +29,7 @@ namespace block_dash\local\data_grid\filter;
  * @package block_dash
  */
 class participants_condition extends condition {
+
     /**
      * Condition values.
      *

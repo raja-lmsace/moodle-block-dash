@@ -112,7 +112,7 @@ class behat_block_dash extends behat_base {
         $this->execute("behat_blocks::i_open_the_blocks_action_menu", $this->escape($blockname));
 
         $this->execute('behat_general::i_click_on_in_the',
-            ["Preferences", "link", $this->escape($blockname), "block"]
+            ["Preference", "link", $this->escape($blockname), "block"]
         );
     }
 

@@ -29,6 +29,7 @@ namespace block_dash\local\dash_framework\structure;
  * @package block_dash
  */
 abstract class table implements table_interface {
+
     /**
      * @var string
      */

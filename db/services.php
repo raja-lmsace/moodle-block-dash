@@ -25,6 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $functions = [
+
     'block_dash_get_block_content' => [
         'classname'     => 'block_dash\external',
         'classpath'     => '',

@@ -35,6 +35,7 @@ use dml_exception;
  * @package block_dash
  */
 class join {
+
     /**
      * Inner JOIN query.
      */

@@ -31,6 +31,7 @@ use block_dash\local\data_source\data_source_factory;
  * @package block_dash
  */
 class configuration extends abstract_configuration {
+
     /**
      * Create configuration from block instance.
      *

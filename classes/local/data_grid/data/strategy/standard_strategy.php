@@ -38,6 +38,7 @@ use block_dash\local\data_grid\field\attribute\context_attribute;
  * @package block_dash
  */
 class standard_strategy implements data_strategy_interface {
+
     /**
      * Convert records.
      *

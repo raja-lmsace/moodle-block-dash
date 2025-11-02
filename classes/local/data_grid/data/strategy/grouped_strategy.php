@@ -88,6 +88,12 @@ class grouped_strategy implements data_strategy_interface {
             foreach ($fielddefinitions as $fielddefinition) {
                 $alias = $fielddefinition->get_alias();
 
+                // Only process fields that exist in the record.
+                if (!property_exists($record, $alias)) {
+                    continue;
+                }
+
+
                 $row->add_data(new field($alias, $fielddefinition->transform_data($record->$alias, $fullrecord),
                     $fielddefinition->get_visibility(), $fielddefinition->get_title()));
             }

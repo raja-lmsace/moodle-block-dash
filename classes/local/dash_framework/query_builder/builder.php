@@ -507,9 +507,7 @@ class builder {
 
         if ($isunique) {
 
-            $builder->set_selects([
-                'count' => 'COUNT(*)']
-            );
+            $builder->set_selects(['count' => 'COUNT(*)']);
 
         } else {
             $builder->set_selects(['count' => 'COUNT(DISTINCT ' . $this->tablealias . '.id)']);
@@ -530,7 +528,9 @@ class builder {
 
         self::$lastcountcachekey = $countcachekey;
 
-        $count = $DB->count_records_sql($sql, $params);
+        // Instead of count_records_sql we use get_field_sql to avoid non negative count exception due do the groupby in the datasource.
+        $count = $DB->get_field_sql($sql, $params);
+        $count = $count ?: 0;
 
         self::$lastcount = $count;
 

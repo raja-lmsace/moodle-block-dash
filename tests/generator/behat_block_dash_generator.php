@@ -82,15 +82,28 @@ class behat_block_dash_generator extends behat_generator_base {
             }
         }
 
-
         if (isset($data['Fields'])) {
             // List of fields to enable.
             $Fields = explode(',', $data['Fields']);
             $datafields = array_map('trim', $Fields);
             $availablefields = [];
+
+            $fieldslookup = [];
             foreach ($datasource->get_available_fields() as $field) {
-                if ($data['Fields'] == 'all' || in_array($field->get_name(), $datafields) || in_array($field->get_title()->out(), $datafields)) {
-                    $availablefields = array_merge($availablefields, [$field->get_alias() => ['visible' => 1]]);
+                $fieldslookup[$field->get_name()] = $field;
+                $fieldslookup[$field->get_title()->out()] = $field;
+            }
+
+            if ($data['Fields'] == 'all') {
+                foreach ($datasource->get_available_fields() as $field) {
+                    $availablefields[$field->get_alias()] = ['visible' => 1];
+                }
+            } else {
+                foreach ($datafields as $requestedfield) {
+                    if (isset($fieldslookup[$requestedfield])) {
+                        $field = $fieldslookup[$requestedfield];
+                        $availablefields[$field->get_alias()] = ['visible' => 1];
+                    }
                 }
             }
             // Available fields need to be merged.

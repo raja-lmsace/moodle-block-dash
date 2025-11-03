@@ -33,6 +33,32 @@ Behat\Mink\Exception\ExpectationException as ExpectationException;
  */
 class behat_block_dash extends behat_base {
     /**
+     * Convert page names to URLs for steps like 'When I am on the "[page name]" page'.
+     *
+     * Recognised page names are:
+     * | default dashboard     | URL: /my/indexsys.php |
+     *
+     * @param string $page name of the page.
+     * @return moodle_url the corresponding URL.
+     */
+    protected function resolve_page_url(string $page): moodle_url {
+        $parts = explode('>', strtolower($page));
+        $section = trim($parts[0]);
+        if (count($parts) < 2) {
+            return match (trim($section)) {
+                'dashboard' => new moodle_url('/my/'),
+                'default dashboard' => new moodle_url('/my/indexsys.php'),
+                default => throw new Exception('Unrecognised dash page section "' . $section . '."'),
+            };
+        }
+
+        switch (strtolower($page)) {
+            default:
+                throw new Exception('Unrecognised quiz page type "' . $page . '."');
+        }
+    }
+
+    /**
      * Turns block editing mode on.
      *
      * @Given I turn dash block editing mode on

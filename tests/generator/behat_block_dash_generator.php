@@ -1,6 +1,32 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * Block dash instance test instance generate defined.
+ *
+ * @package   block_dash
+ * @copyright 2024, bdecent gmbh bdecent.de
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 use block_dash\local\data_source\data_source_factory;
 
+/**
+ * Dash Block behat data generator.
+ */
 class behat_block_dash_generator extends behat_generator_base {
     /**
      * Get a list of the entities that can be created.
@@ -26,9 +52,13 @@ class behat_block_dash_generator extends behat_generator_base {
         ];
     }
 
+    /**
+     * Preprocess dash block data before creation.
+     * @param array $data
+     * @return array
+     */
     protected function preprocess_dash_block(array $data): array {
-
-        // print_r($data);exit;
+        // Validate required fields.
         if (empty($data['type']) || !$this->is_valid_dash_type($data['type'])) {
             throw new InvalidArgumentException('Invalid or missing dash block type.');
         }
@@ -38,7 +68,6 @@ class behat_block_dash_generator extends behat_generator_base {
             throw new InvalidArgumentException('Invalid dash block name.');
         }
 
-        // $data['configdata'] = ['preferences' => ['data_source_idnumber' => $datasource]];
         $preferences['config_preferences'] = [];
         $preferences['config_data_source_idnumber'] = $datasource;
 
@@ -52,6 +81,36 @@ class behat_block_dash_generator extends behat_generator_base {
                 $datasource->set_default_preferences($preferences);
             }
         }
+
+
+        if (isset($data['Fields'])) {
+            // List of fields to enable.
+            $Fields = explode(',', $data['Fields']);
+            $datafields = array_map('trim', $Fields);
+            $availablefields = [];
+            foreach ($datasource->get_available_fields() as $field) {
+                if ($data['Fields'] == 'all' || in_array($field->get_name(), $datafields) || in_array($field->get_title()->out(), $datafields)) {
+                    $availablefields = array_merge($availablefields, [$field->get_alias() => ['visible' => 1]]);
+                }
+            }
+            // Available fields need to be merged.
+            $preferences['config_preferences']['available_fields'] = $availablefields;
+        }
+
+        if (isset($data['filters'])) {
+            $datafilters = explode(',', $data['filters']);
+            $datafilters = array_map(fn($v) => strtolower(trim($v)), $datafilters);
+            $filtercollection = $datasource->get_filter_collection();
+            $filters = [];
+            foreach ($filtercollection->get_filters() as $key => $filter) {
+                if ($data['filters'] == 'all' || in_array($filter->get_name(), $datafilters)
+                    || in_array(strtolower($filter->get_label()), $datafilters)) {
+                    $filters[$filter->get_name()] = ['enabled' => 1];
+                }
+            }
+            $preferences['config_preferences']['filters'] = $filters;
+        }
+
         $config->preferences = $preferences['config_preferences'] ?? [];
 
         if (isset($data['title'])) {
@@ -59,24 +118,39 @@ class behat_block_dash_generator extends behat_generator_base {
         }
 
         $data['configdata'] = $config;
-        // if (isset($data->configdata)) {
-        // }
-        // print_r($datasource);exit;
 
         return $data;
     }
 
+    /**
+     * Preprocess dash block default data before creation.
+     * @param array $data
+     * @return array
+     */
     protected function preprocess_dash_block_default(array $data): array {
         $data = $this->preprocess_dash_block($data);
 
         return $data;
     }
 
+    /**
+     * Validate dash type. it can be datasource or widget.
+     *
+     * @param string $type
+     * @return string
+     */
     protected function is_valid_dash_type(string $type): string {
         $dashtypes = ['datasource', 'widget'];
         return in_array($type, $dashtypes);
     }
 
+    /**
+     * Validate dash name.
+     *
+     * @param string $dashtype
+     * @param string $name
+     * @return string|false
+     */
     protected function is_valid_dash_name(string $dashtype, string $name): string|false {
         $options = \block_dash\local\data_source\data_source_factory::get_data_source_form_options();
         foreach ($options as $optionname => $optionlabel) {

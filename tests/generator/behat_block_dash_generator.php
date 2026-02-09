@@ -77,28 +77,44 @@ class behat_block_dash_generator extends behat_generator_base {
         $datasource = data_source_factory::build_data_source($config->data_source_idnumber, $context);
         if ($datasource) {
             if (method_exists($datasource, 'set_default_preferences')) {
-                // $preferences = [];
                 $datasource->set_default_preferences($preferences);
             }
         }
 
-        if (isset($data['Fields'])) {
+        if (isset($data['fields'])) {
             // List of fields to enable.
-            $Fields = explode(',', $data['Fields']);
-            $datafields = array_map('trim', $Fields);
+            $fields = explode(',', $data['fields']);
+            $datafields = array_map('trim', $fields);
             $availablefields = [];
 
-            $fieldslookup = [];
-            foreach ($datasource->get_available_fields() as $field) {
-                $fieldslookup[$field->get_name()] = $field;
-                $fieldslookup[$field->get_title()->out()] = $field;
-            }
+            $disabledfields = explode(',', $data['disablefields'] ?? '');
+            $disabledfields = array_map('trim', $disabledfields);
 
-            if ($data['Fields'] == 'all') {
+            if ($data['fields'] == 'all') {
                 foreach ($datasource->get_available_fields() as $field) {
+                    $isdisabled = in_array($field->get_name(), $disabledfields)
+                        || in_array($field->get_title()->out(), $disabledfields) || in_array($field->get_alias(), $disabledfields);
+                    if ($isdisabled) {
+                        continue;
+                    }
                     $availablefields[$field->get_alias()] = ['visible' => 1];
                 }
             } else {
+                $fieldslookup = [];
+                foreach ($datasource->get_available_fields() as $field) {
+                    if (
+                        in_array($field->get_name(), $disabledfields) ||
+                        in_array($field->get_title()->out(), $disabledfields) ||
+                        in_array($field->get_alias(), $disabledfields)
+                    ) {
+                        continue;
+                    }
+
+                    $fieldslookup[$field->get_name()] = $field;
+                    $fieldslookup[$field->get_title()->out()] = $field;
+                    $fieldslookup[$field->get_alias()] = $field;
+                }
+
                 foreach ($datafields as $requestedfield) {
                     if (isset($fieldslookup[$requestedfield])) {
                         $field = $fieldslookup[$requestedfield];
@@ -116,12 +132,18 @@ class behat_block_dash_generator extends behat_generator_base {
             $filtercollection = $datasource->get_filter_collection();
             $filters = [];
             foreach ($filtercollection->get_filters() as $key => $filter) {
-                if ($data['filters'] == 'all' || in_array($filter->get_name(), $datafilters)
-                    || in_array(strtolower($filter->get_label()), $datafilters)) {
+                if (
+                    $data['filters'] == 'all' || in_array($filter->get_name(), $datafilters)
+                    || in_array(strtolower($filter->get_label()), $datafilters)
+                ) {
                     $filters[$filter->get_name()] = ['enabled' => 1];
                 }
             }
             $preferences['config_preferences']['filters'] = $filters;
+        }
+
+        if (isset($data['perpage'])) {
+            $preferences['config_preferences']['perpage'] = (int)$data['perpage'];
         }
 
         $config->preferences = $preferences['config_preferences'] ?? [];

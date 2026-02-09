@@ -43,7 +43,6 @@ class link_attribute extends abstract_field_attribute {
     public function transform_data($data, \stdClass $record) {
 
         if ($data) {
-
             if ($label = $this->get_option('label')) {
                 return \html_writer::link($data, $label);
             }
@@ -67,6 +66,15 @@ class link_attribute extends abstract_field_attribute {
      * @return bool
      */
     public function is_needs_construct_data() {
+        return true;
+    }
+
+    /**
+     * Does the attribute support direct sql field name to construct the data without receiving the data to transform.
+     *
+     * @return bool
+     */
+    public function supports_direct_field() {
         return true;
     }
 

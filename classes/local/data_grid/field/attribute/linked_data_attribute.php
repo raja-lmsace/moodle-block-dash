@@ -89,4 +89,3 @@ class linked_data_attribute extends abstract_field_attribute {
         }
     }
 }
-

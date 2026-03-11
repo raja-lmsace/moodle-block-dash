@@ -31,6 +31,7 @@ use block_dash\local\data_source\data_source_interface;
  * @package block_dash
  */
 interface layout_factory_interface {
+
     /**
      * Build and return a layout based on unique identifier.
      *

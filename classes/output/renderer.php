@@ -26,6 +26,7 @@ namespace block_dash\output;
 
 use block_dash\local\data_source\abstract_data_source;
 use block_dash\local\data_source\data_source_interface;
+
 use Mustache_Engine;
 /**
  * Class renderer.
@@ -104,6 +105,7 @@ class renderer extends \plugin_renderer_base {
                 // JS into the page.
                 'blacklistednestedhelpers' => ['js'],
             ]);
+
         }
 
         return $this->mustache;
@@ -132,10 +134,8 @@ class renderer extends \plugin_renderer_base {
      * @throws \coding_exception
      */
     public function render_data_source(abstract_data_source $datasource) {
-        return $this->render_from_template(
-            $datasource->get_layout()->get_mustache_template_name(),
-            $datasource->export_for_template($this)
-        );
+        return $this->render_from_template($datasource->get_layout()->get_mustache_template_name(),
+            $datasource->export_for_template($this));
     }
 
     /**

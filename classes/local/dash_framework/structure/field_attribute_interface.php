@@ -31,6 +31,7 @@ use block_dash\local\dash_framework\structure\field_interface;
  * @package block_dash
  */
 interface field_attribute_interface {
+
     /**
      * Set the field definition this attribute is attached to.
      *

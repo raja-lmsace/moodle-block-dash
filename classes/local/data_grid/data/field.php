@@ -29,6 +29,7 @@ namespace block_dash\local\data_grid\data;
  * @package block_dash
  */
 class field implements field_interface {
+
     /**
      * @var string
      */

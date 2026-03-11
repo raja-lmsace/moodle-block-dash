@@ -31,7 +31,8 @@ use context;
  *
  * @package block_dash
  */
-class data_collection_new implements \ArrayAccess, data_collection_interface {
+class data_collection_new implements data_collection_interface, \ArrayAccess {
+
     /**
      * @var field_interface[]
      */

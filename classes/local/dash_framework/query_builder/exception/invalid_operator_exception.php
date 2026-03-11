@@ -32,6 +32,7 @@ use moodle_exception;
  * @package block_dash
  */
 class invalid_operator_exception extends moodle_exception {
+
     /**
      * Constructor
      * @param string $link The url where the user will be prompted to continue.

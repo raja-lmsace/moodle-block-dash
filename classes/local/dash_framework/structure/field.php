@@ -34,6 +34,7 @@ use lang_string;
  * @package block_dash
  */
 class field implements field_interface {
+
     /**
      * @var string The column name of the field as it appears in the table (e.g. firstname).
      */
@@ -112,18 +113,14 @@ class field implements field_interface {
      * @param string $fieldjoinsql SQL for joins, if this field is a join field.
      * @param bool $forcejoin If true, the field will be joined even if it is not visible.
      */
-    public function __construct(
-        string $name,
-        lang_string $title,
-        table $table,
-        $select = null,
-        array $attributes = [],
-        $options = [],
-        $visibility = self::VISIBILITY_VISIBLE,
-        $sortselect = null,
-        $fieldjoinsql = '',
-        $forcejoin = false
-    ) {
+    public function __construct(string $name,
+                                lang_string $title,
+                                table $table,
+                                $select = null,
+                                array $attributes = [],
+                                $options = [],
+                                $visibility = self::VISIBILITY_VISIBLE,
+                                $sortselect = null, $fieldjoinsql = '', $forcejoin=false) {
         $this->name = $name;
         $this->title = $title;
         $this->table = $table;
@@ -149,7 +146,6 @@ class field implements field_interface {
      * @return mixed
      */
     final public function transform_data($data, \stdClass $record) {
-
         foreach ($this->attributes as $attribute) {
             $data = $attribute->transform_data($data, $record);
         }

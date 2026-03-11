@@ -29,6 +29,7 @@ namespace block_dash\local\data_grid\field\attribute;
  * @package block_dash
  */
 class button_attribute extends abstract_field_attribute {
+
     /**
      * After records are relieved from database each field has a chance to transform the data.
      * Example: Convert unix timestamp into a human readable date format
@@ -60,6 +61,7 @@ class button_attribute extends abstract_field_attribute {
             if ($labelfield = $this->get_option('label_field')) {
                 return $OUTPUT->single_button($data, $record->$labelfield, 'get', $params);
             }
+
         }
 
         return $data;
@@ -81,7 +83,7 @@ class button_attribute extends abstract_field_attribute {
      * @param string $customvalue
      * @return void
      */
-    public function set_transform_field($field, $customvalue = null) {
+    public function set_transform_field($field, $customvalue=null) {
         $this->set_option('label_field', $field);
 
         if ($customvalue !== null) {

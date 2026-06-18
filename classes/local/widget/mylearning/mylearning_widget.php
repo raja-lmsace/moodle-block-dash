@@ -106,9 +106,9 @@ class mylearning_widget extends abstract_widget {
             $summary = (new \coursecat_helper($course))->get_course_formatted_summary($courseelement);
 
             $category = (class_exists('\core_course_category'))
-            ? \core_course_category::get($course->category) : \coursecat::get($course->category);
+            ? \core_course_category::get($course->category, IGNORE_MISSING) : \coursecat::get($course->category, IGNORE_MISSING);
             $course->courseimage = $this->courseimage($course);
-            $course->category = (isset($category->name) ? format_string($category->name) : '');
+            $course->category = ($category && isset($category->name)) ? format_string($category->name) : '';
             $course->badges = $this->badges($course);
             $course->coursecontent = $this->coursecontent($course);
             $course->contacts = $this->contacts($course);
@@ -543,4 +543,14 @@ class mylearning_widget extends abstract_widget {
         }
         return $coursecontents;
     }
+
+    /**
+     * My Learning widget only needs the General tab.
+     *
+     * @return array
+     */
+    public function get_preferences_form_tabs(): array {
+        return [\block_dash\local\data_source\form\preferences_form::TAB_GENERAL];
+    }
+
 }
